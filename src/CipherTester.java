@@ -1,4 +1,6 @@
 import java.util.Scanner;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 public class CipherTester {
 	private static Scanner input = new Scanner(System.in);
@@ -6,7 +8,7 @@ public class CipherTester {
 	public static void main(String[] args) {
 		boolean terminated = false;
 		while (!terminated) {
-			System.out.print("What cipher would you like to test?\n1) Atbash\n2) Ceasar\n3) A1Z26\n4) Vigenere\n5) None, exit program\nChoice: ");
+			System.out.print("What cipher would you like to test?\n1) Atbash\n2) Ceasar\n3) A1Z26\n4) Vigen\u00E9re\n5) None, exit program\nChoice: ");
 			String choice = input.nextLine().trim();
 			terminated = executeChoice(choice);
 		}
@@ -24,6 +26,7 @@ public class CipherTester {
 					testA1z26(); 
 					break;
 				case "4":
+					testVigenere();
 					break;
 				case "5":
 					return true;
@@ -78,29 +81,13 @@ public class CipherTester {
 		int shift = 0;
 		switch (choice) {
 				case "1":
-					while (!valid) {
-						System.out.print("Enter the shift: ");
-						try {
-							shift = Integer.parseInt(input.nextLine().trim());
-							valid = true;
-						} catch (Exception e) {
-							System.out.print("Invalid selection. Enter the shift: ");
-						}	
-					}
-					System.out.print("Enter the message to encrypt with Ceasar, shift of " + shift + ": ");
+					shift = getCeasarShift();
+					System.out.print("Enter the message to encrypt with Ceasar, shift of " + shift % 26 + ": ");
 					System.out.println("Encrypted message: " + CipherTools.ceasarEncrypt(input.nextLine().trim(), shift));
 					break;
 				case "2":
-					while (!valid) {
-						System.out.print("Enter the original shift: ");
-						try {
-							shift = Integer.parseInt(input.nextLine().trim());
-							valid = true;
-						} catch (Exception e) {
-							System.out.print("Invalid selection. Enter the original shift: ");
-						}	
-					}
-					System.out.print("Enter the message to decrypt from Ceasar, shift of " + shift + ": ");
+					shift = getCeasarShift();
+					System.out.print("Enter the message to decrypt from Ceasar, shift of " + shift % 26 + ": ");
 					System.out.println("Decrypted message: " + CipherTools.ceasarDecrypt(input.nextLine().trim(), shift));
 					break;
 				case "3":
@@ -111,6 +98,24 @@ public class CipherTester {
 					return executeCeasarChoice(newChoice);
 		}
 		return false;
+	}
+
+	private static int getCeasarShift() {
+		int shift = 0;
+		boolean valid = false;
+		System.out.print("Enter the shift: ");
+		while (!valid) {
+			String shiftStr = input.nextLine().trim();
+			Pattern p = Pattern.compile("^$|(?![0-9]).");
+			Matcher m = p.matcher(shiftStr);
+			if (m.find()) {	
+				System.out.print("Invalid selection. Enter the shift: ");
+			} else {
+				shift = Integer.parseInt(shiftStr);
+				valid = true;
+			}
+		}
+		return CipherTools.mod(shift, 26);
 	}
 
 	private static void testA1z26() {
@@ -140,5 +145,54 @@ public class CipherTester {
 					return executeA1z26Choice(newChoice);
 		}
 		return false;
+	}
+
+	private static void testVigenere() {
+		boolean terminated = false;
+		while (!terminated) {
+			System.out.print("What would you like to do?\n1) Encrypt with Vigen\u00E9re\n2) Decrypt from Vigen\u00E9re\n3) Return to previous menu\nChoice: ");
+			String choice = input.nextLine().trim();
+			terminated = executeVigenereChoice(choice);
+		}
+	}
+
+	private static boolean executeVigenereChoice(String choice) {
+		String key = "";
+		switch (choice) {
+				case "1":
+					key = getVigenereKey();
+					System.out.print("Enter the message to encrypt with Vigen\u00E9re, key of \"" + key + "\": ");
+					System.out.println("Encrypted message: " + CipherTools.vigenereEncrypt(input.nextLine().trim(), key));
+					break;
+				case "2":
+					key = getVigenereKey();
+					System.out.print("Enter the message to decrypt from Vigen\u00E9re, key of \"" + key + "\": ");
+					System.out.println("Decrypted message: " + CipherTools.vigenereDecrypt(input.nextLine().trim(), key));
+					break;
+				case "3":
+					return true;
+				default:
+					System.out.print("Invalid selection.\nChoice: ");
+					String newChoice = input.nextLine().trim();
+					return executeCeasarChoice(newChoice);
+		}
+		return false;
+	}
+
+	private static String getVigenereKey() {
+		String key = "";
+		boolean valid = false;
+		System.out.print("Enter the key: ");
+		while (!valid) {
+			key = input.nextLine().trim().toUpperCase();
+			Pattern p = Pattern.compile("^$|(?![A-Z]).");
+			Matcher m = p.matcher(key);
+			if (m.find()) {	
+				System.out.print("Invalid selection. Enter the key: ");
+			} else {
+				valid = true;
+			}
+		}
+		return key;
 	}
 }

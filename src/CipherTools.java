@@ -1,3 +1,6 @@
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
+
 public class CipherTools {
 
 	public static final String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -10,6 +13,10 @@ public class CipherTools {
 			return Character.toLowerCase(toMatch);
 		}
 		return toMatch;
+	}
+
+	public static int mod(int dividend, int divisor) {
+		return ((dividend % divisor) + divisor) % divisor;
 	}
     	
 	public static String atbashEncrypt(String message) {
@@ -32,11 +39,11 @@ public class CipherTools {
 
 	public static String ceasarEncrypt(String message, int shift) {
 		String messageUp = message.toUpperCase();
+		shift = mod(shift, 26);
 		String ceasar = "";
-
 		for (int i = 0; i < message.length(); i++) {
-			if (Character.isLetter(message.charAt(i))) {	
-				ceasar += matchCase(alphabet.charAt((alphabet.indexOf(messageUp.charAt(i)) + shift) % 26), message.charAt(i));
+			if (Character.isLetter(message.charAt(i))) {
+				ceasar += matchCase(alphabet.charAt(mod(alphabet.indexOf(messageUp.charAt(i)) + shift, 26)), message.charAt(i));
 			} else {
 				ceasar += message.charAt(i);
 			}
@@ -88,10 +95,15 @@ public class CipherTools {
 		return message;
 	}
 
-	private static String vigenere(String input, String key, boolean encrypt) { //proper key word testing
+	private static String vigenere(String input, String key, boolean encrypt) {
 		String inputUp = input.toUpperCase();
 		String result = "";
-		key = key.toUpperCase();
+		key = key.trim().toUpperCase();
+		Pattern p = Pattern.compile("^$|(?![A-Z]).");
+		Matcher m = p.matcher(key);
+		if (m.find()) {
+			throw new IllegalArgumentException();
+		}
 		int keyIndex = 0;
 
 		for (int i = 0; i < input.length(); i++) {
