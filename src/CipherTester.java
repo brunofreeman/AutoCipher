@@ -21,6 +21,7 @@ public class CipherTester {
 					testCeasar();
 					break;
 				case "3":
+					testA1z26(); 
 					break;
 				case "4":
 					break;
@@ -29,7 +30,7 @@ public class CipherTester {
 				default:
 					System.out.print("Invalid selection.\nChoice: ");
 					String newChoice = input.nextLine().trim();
-					executeChoice(newChoice);
+					return executeChoice(newChoice);
 		}
 		return false;
 	}
@@ -108,6 +109,35 @@ public class CipherTester {
 					System.out.print("Invalid selection.\nChoice: ");
 					String newChoice = input.nextLine().trim();
 					return executeCeasarChoice(newChoice);
+		}
+		return false;
+	}
+
+	private static void testA1z26() {
+		boolean terminated = false;
+		while (!terminated) {
+			System.out.print("What would you like to do?\n1) Encrypt with A1Z26\n2) Decrypt from A1Z26\n3) Return to previous menu\nChoice: ");
+			String choice = input.nextLine().trim();
+			terminated = executeA1z26Choice(choice);
+		}
+	}
+
+	private static boolean executeA1z26Choice(String choice) {
+		switch (choice) {
+				case "1":
+					System.out.print("Enter the message to encrypt with A1Z26: ");
+					System.out.println("Encrypted message: " + CipherTools.a1z26Encrypt(input.nextLine().trim()));
+					break;
+				case "2":
+					System.out.print("Enter the message to decrypt from A1Z26: ");
+					System.out.println("Decrypted message: " + CipherTools.a1z26Decrypt(input.nextLine().trim()));
+					break;
+				case "3":
+					return true;
+				default:
+					System.out.print("Invalid selection.\nChoice: ");
+					String newChoice = input.nextLine().trim();
+					return executeA1z26Choice(newChoice);
 		}
 		return false;
 	}

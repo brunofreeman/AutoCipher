@@ -59,15 +59,17 @@ public class CipherTools {
 			} else {
 				a1z26 += message.charAt(i);
 			}
-			if (i < message.length()) {
+			if (i < message.length() - 1 && Character.isLetter(message.charAt(i + 1))) {
 				a1z26 += "-";
 			}
 		}
 
+		a1z26 = a1z26.replaceAll(" -", " ");
 		return a1z26;
 	}
 
 	public static String a1z26Decrypt(String a1z26) {
+		a1z26 = a1z26.replaceAll("(?![a-zA-Z0-9]).", "-$0-");
 		String[] parts = a1z26.split("-");
 		String message = "";
 
