@@ -18,6 +18,7 @@ public class CipherTester {
 					testAtbash();
 					break;
 				case "2":
+					testCeasar();
 					break;
 				case "3":
 					break;
@@ -57,7 +58,56 @@ public class CipherTester {
 				default:
 					System.out.print("Invalid selection.\nChoice: ");
 					String newChoice = input.nextLine().trim();
-					executeAtbashChoice(newChoice);
+					return executeAtbashChoice(newChoice);
+		}
+		return false;
+	}
+
+	private static void testCeasar() {
+		boolean terminated = false;
+		while (!terminated) {
+			System.out.print("What would you like to do?\n1) Encrypt with Ceasar\n2) Decrypt from Ceasar\n3) Return to previous menu\nChoice: ");
+			String choice = input.nextLine().trim();
+			terminated = executeCeasarChoice(choice);
+		}
+	}
+
+	private static boolean executeCeasarChoice(String choice) {
+		boolean valid = false;
+		int shift = 0;
+		switch (choice) {
+				case "1":
+					while (!valid) {
+						System.out.print("Enter the shift: ");
+						try {
+							shift = Integer.parseInt(input.nextLine().trim());
+							valid = true;
+						} catch (Exception e) {
+							System.out.print("Invalid selection. Enter the shift: ");
+						}	
+					}
+					System.out.print("Enter the message to encrypt with Ceasar, shift of " + shift + ": ");
+					System.out.println("Encrypted message: " + CipherTools.ceasarEncrypt(input.nextLine().trim(), shift));
+					break;
+				case "2":
+					while (!valid) {
+						System.out.print("Enter the original shift: ");
+						try {
+							shift = Integer.parseInt(input.nextLine().trim());
+							valid = true;
+						} catch (Exception e) {
+							System.out.print("Invalid selection. Enter the original shift: ");
+						}	
+					}
+					System.out.print("Enter the message to decrypt from Ceasar, shift of " + shift + ": ");
+					System.out.println("Decrypted message: " + CipherTools.ceasarDecrypt(input.nextLine().trim(), shift));
+					break;
+				case "3":
+					return true;
+				default:
+					System.out.print("Invalid selection.\nChoice: ");
+					String newChoice = input.nextLine().trim();
+					return executeCeasarChoice(newChoice);
 		}
 		return false;
 	}

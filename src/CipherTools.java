@@ -86,7 +86,7 @@ public class CipherTools {
 		return message;
 	}
 
-	private static String vigenere(String input, String key, boolean encrypt) {
+	private static String vigenere(String input, String key, boolean encrypt) { //proper key word testing
 		String inputUp = input.toUpperCase();
 		String result = "";
 		key = key.toUpperCase();
