@@ -8,7 +8,7 @@ public class CipherTester {
 	public static void main(String[] args) {
 		boolean terminated = false;
 		while (!terminated) {
-			System.out.print("What cipher would you like to test?\n1) Atbash\n2) Ceasar\n3) A1Z26\n4) Vigen\u00E9re\n5) None, exit program\nChoice: ");
+			System.out.print("What cipher would you like to test?\n1) Atbash\n2) Ceasar\n3) A1Z26\n4) Vigen\u00E9re\n5) Rail Fence\n6) None, exit program\nChoice: ");
 			String choice = input.nextLine().trim();
 			terminated = executeChoice(choice);
 		}
@@ -29,6 +29,9 @@ public class CipherTester {
 					testVigenere();
 					break;
 				case "5":
+					testRailFence();
+					break;
+				case "6":
 					return true;
 				default:
 					System.out.print("Invalid selection.\nChoice: ");
@@ -194,5 +197,60 @@ public class CipherTester {
 			}
 		}
 		return key;
+	}
+
+	private static void testRailFence() {
+		boolean terminated = false;
+		while (!terminated) {
+			System.out.print("What would you like to do?\n1) Encrypt with Rail Fence\n2) Decrypt from Rail Fence\n3) Return to previous menu\nChoice: ");
+			String choice = input.nextLine().trim();
+			terminated = executeRailFenceChoice(choice);
+		}
+	}
+
+	private static boolean executeRailFenceChoice(String choice) {
+		boolean valid = false;
+		int rails = 0;
+		switch (choice) {
+				case "1":
+					rails = getRailFenceRails();
+					System.out.print("Enter the message to encrypt with Rail Fence, " + rails + " rails: ");
+					System.out.println("Encrypted message: " + CipherTools.railFenceEncrypt(input.nextLine().trim(), rails));
+					break;
+				case "2":
+					//rails = getRailFenceRails();
+					//System.out.print("Enter the message to decrypt from Rail Fence, " + rails + " rails: ");
+					//System.out.println("Decrypted message: " + CipherTools.railFenceDecrypt(input.nextLine().trim(), rails));
+					break;
+				case "3":
+					return true;
+				default:
+					System.out.print("Invalid selection.\nChoice: ");
+					String newChoice = input.nextLine().trim();
+					return executeCeasarChoice(newChoice);
+		}
+		return false;
+	}
+
+	private static int getRailFenceRails() {
+		int rails = 0;
+		boolean valid = false;
+		System.out.print("Enter the number of rails: ");
+		while (!valid) {
+			String railsStr = input.nextLine().trim();
+			Pattern p = Pattern.compile("^$|(?![0-9]).");
+			Matcher m = p.matcher(railsStr);
+			if (m.find()) {	
+				System.out.print("Invalid selection. Enter the number of rails: ");
+			} else {
+				rails = Integer.parseInt(railsStr);
+				if (rails > 0) {
+					valid = true;
+				} else {
+					System.out.print("Invalid selection. Enter the number of rails: ");
+				}
+			}
+		}
+		return rails;
 	}
 }
