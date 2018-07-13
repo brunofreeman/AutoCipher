@@ -54,11 +54,11 @@ public class CipherTester {
 		switch (choice) {
 				case "1":
 					System.out.print("Enter the message to encrypt with Atbash: ");
-					System.out.println("Encrypted message: " + CipherTools.atbashEncrypt(input.nextLine().trim()));
+					System.out.println("Encrypted message: " + CipherTools.atbashEncrypt(input.nextLine()));
 					break;
 				case "2":
 					System.out.print("Enter the message to decrypt from Atbash: ");
-					System.out.println("Decrypted message: " + CipherTools.atbashDecrypt(input.nextLine().trim()));
+					System.out.println("Decrypted message: " + CipherTools.atbashDecrypt(input.nextLine()));
 					break;
 				case "3":
 					return true;
@@ -86,12 +86,12 @@ public class CipherTester {
 				case "1":
 					shift = getCeasarShift();
 					System.out.print("Enter the message to encrypt with Ceasar, shift of " + shift % 26 + ": ");
-					System.out.println("Encrypted message: " + CipherTools.ceasarEncrypt(input.nextLine().trim(), shift));
+					System.out.println("Encrypted message: " + CipherTools.ceasarEncrypt(input.nextLine(), shift));
 					break;
 				case "2":
 					shift = getCeasarShift();
 					System.out.print("Enter the message to decrypt from Ceasar, shift of " + shift % 26 + ": ");
-					System.out.println("Decrypted message: " + CipherTools.ceasarDecrypt(input.nextLine().trim(), shift));
+					System.out.println("Decrypted message: " + CipherTools.ceasarDecrypt(input.nextLine(), shift));
 					break;
 				case "3":
 					return true;
@@ -134,11 +134,11 @@ public class CipherTester {
 		switch (choice) {
 				case "1":
 					System.out.print("Enter the message to encrypt with A1Z26: ");
-					System.out.println("Encrypted message: " + CipherTools.a1z26Encrypt(input.nextLine().trim()));
+					System.out.println("Encrypted message: " + CipherTools.a1z26Encrypt(input.nextLine()));
 					break;
 				case "2":
 					System.out.print("Enter the message to decrypt from A1Z26: ");
-					System.out.println("Decrypted message: " + CipherTools.a1z26Decrypt(input.nextLine().trim()));
+					System.out.println("Decrypted message: " + CipherTools.a1z26Decrypt(input.nextLine()));
 					break;
 				case "3":
 					return true;
@@ -165,12 +165,12 @@ public class CipherTester {
 				case "1":
 					key = getVigenereKey();
 					System.out.print("Enter the message to encrypt with Vigen\u00E9re, key of \"" + key + "\": ");
-					System.out.println("Encrypted message: " + CipherTools.vigenereEncrypt(input.nextLine().trim(), key));
+					System.out.println("Encrypted message: " + CipherTools.vigenereEncrypt(input.nextLine(), key));
 					break;
 				case "2":
 					key = getVigenereKey();
 					System.out.print("Enter the message to decrypt from Vigen\u00E9re, key of \"" + key + "\": ");
-					System.out.println("Decrypted message: " + CipherTools.vigenereDecrypt(input.nextLine().trim(), key));
+					System.out.println("Decrypted message: " + CipherTools.vigenereDecrypt(input.nextLine(), key));
 					break;
 				case "3":
 					return true;
@@ -215,12 +215,12 @@ public class CipherTester {
 				case "1":
 					rails = getRailFenceRails();
 					System.out.print("Enter the message to encrypt with Rail Fence, " + rails + " rails: ");
-					System.out.println("Encrypted message: " + CipherTools.railFenceEncrypt(input.nextLine().trim(), rails));
+					System.out.println("Encrypted message: " + CipherTools.railFenceEncrypt(input.nextLine(), rails));
 					break;
 				case "2":
-					//rails = getRailFenceRails();
-					//System.out.print("Enter the message to decrypt from Rail Fence, " + rails + " rails: ");
-					//System.out.println("Decrypted message: " + CipherTools.railFenceDecrypt(input.nextLine().trim(), rails));
+					rails = getRailFenceRails();
+					System.out.print("Enter the message to decrypt from Rail Fence, " + rails + " rails: ");
+					System.out.println("Decrypted message: " + CipherTools.railFenceDecrypt(input.nextLine(), rails));
 					break;
 				case "3":
 					return true;

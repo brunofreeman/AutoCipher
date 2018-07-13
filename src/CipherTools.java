@@ -183,4 +183,41 @@ public class CipherTools {
 			return railFence;
 		}
 	}
+
+	public static String railFenceDecrypt(String railFence, int rails) throws IllegalArgumentException {
+		if (rails < 0) {
+			throw new IllegalArgumentException();
+		}
+		if (rails == 1) {
+			return railFence;
+		} else {
+			int completeCycle = (2 * rails) - 2;
+			int[] lettersPerRail = new int[rails];
+			lettersPerRail[0] = railFence.length() / completeCycle;
+			lettersPerRail[rails - 1] = lettersPerRail[0];
+
+			for (int i = 1; i < rails - 1; i++) {
+				lettersPerRail[i] = 2 * lettersPerRail[0];
+			}
+
+			for (int i = 0; i < railFence.length() % completeCycle; i++) {
+				lettersPerRail[i] += 1;
+			}
+
+			int[] railCounter = new int[rails];
+			String message = "";
+
+			for (int i = 0; i < railFence.length(); i++) {
+				int railOn = i % completeCycle;
+				railOn = railOn < rails ? railOn : completeCycle - railOn;
+				int lettersIn = railCounter[railOn]++;
+				for (int j = 0; j < railOn; j++) {
+					lettersIn += lettersPerRail[j];
+				}
+				message += railFence.charAt(lettersIn);
+			}
+
+			return message;
+		}
+	}
 }
