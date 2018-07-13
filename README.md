@@ -3,7 +3,7 @@
 ## Useful commands (execute from from root directory):
 compile:
 ```
-javac -d classes src\\*.java
+javac -d classes src\*.java
 ```
 run:
 ```
