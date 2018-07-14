@@ -30,6 +30,23 @@ public class CipherTools {
 		return -1;
 	}
 
+	public static int gcd(int a, int b) { //Euclid's algorithm
+		if (b > a) {
+			int temp = a;
+			a = b;
+			b = temp;
+		}
+		if (a % b == 0) {
+			return b;
+		} else {
+			return gcd(a / b, a % b);
+		}
+	}
+
+	public static boolean relativelyPrime(int a, int b) {
+		return gcd(a, b) == 1;
+	}
+
 	public static void validateKey(String key) throws IllegalArgumentException {
 		Pattern p = Pattern.compile("^$|(?![A-Z]).");
 		Matcher m = p.matcher(key);
@@ -283,5 +300,24 @@ public class CipherTools {
 		}
 
 		return message;
+	}
+
+	public static String affineEncrypt(String message, int step, int shift) throws IllegalArgumentException {
+		step = mod(step, 26);
+		shift = mod(shift, 26);
+		if (!relativelyPrime(step, 26)) {
+			throw new IllegalArgumentException();
+		}
+		String affine = "";
+
+		for (int i = 0; i < message.length(); i++) {
+			if (Character.isLetter(message.charAt(i))) {
+				affine += matchCase(ALPHABET.charAt(mod(step * ALPHABET.indexOf(message.toUpperCase().charAt(i)) + shift, 26)), message.charAt(i));
+			} else {
+				affine += message.charAt(i);
+			}
+		}
+
+		return affine;
 	}
 }
