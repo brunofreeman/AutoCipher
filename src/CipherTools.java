@@ -3,7 +3,7 @@ import java.util.regex.Matcher;
 
 public class CipherTools {
 
-	public static final String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	public static final String ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 	public static char matchCase(char toMatch, char ref) {
 		int unicode = (int) ref;
@@ -25,7 +25,7 @@ public class CipherTools {
 
         for (int i = 0; i < message.length(); i++) {
             if (Character.isLetter(message.charAt(i))) {
-                atbash += matchCase(alphabet.charAt(25 - alphabet.indexOf(messageUp.charAt(i))), message.charAt(i));
+                atbash += matchCase(ALPHABET.charAt(25 - ALPHABET.indexOf(messageUp.charAt(i))), message.charAt(i));
             } else {
                 atbash += message.charAt(i);
             }
@@ -45,7 +45,7 @@ public class CipherTools {
 
 		for (int i = 0; i < message.length(); i++) {
 			if (Character.isLetter(message.charAt(i))) {
-				ceasar += matchCase(alphabet.charAt(mod(alphabet.indexOf(messageUp.charAt(i)) + shift, 26)), message.charAt(i));
+				ceasar += matchCase(ALPHABET.charAt(mod(ALPHABET.indexOf(messageUp.charAt(i)) + shift, 26)), message.charAt(i));
 			} else {
 				ceasar += message.charAt(i);
 			}
@@ -64,7 +64,7 @@ public class CipherTools {
 
 		for (int i = 0; i < message.length(); i++) {
 			if (Character.isLetter(message.charAt(i))) {	
-				a1z26 += (alphabet.indexOf(message.charAt(i)) + 1) ;
+				a1z26 += (ALPHABET.indexOf(message.charAt(i)) + 1) ;
 			} else {
 				a1z26 += message.charAt(i);
 			}
@@ -88,7 +88,7 @@ public class CipherTools {
 				if (num < 1 || num > 26) {
 					throw new Exception();
 				}
-				message += alphabet.charAt(num - 1);
+				message += ALPHABET.charAt(num - 1);
 			} catch (Exception e) {
 				message += parts[i];
 			}
@@ -110,7 +110,7 @@ public class CipherTools {
 
 		for (int i = 0; i < input.length(); i++) {
 			if (Character.isLetter(input.charAt(i))) {
-				result += encrypt ? ceasarEncrypt(Character.toString(input.charAt(i)), alphabet.indexOf(key.charAt(keyIndex++))) : ceasarDecrypt(Character.toString(input.charAt(i)), alphabet.indexOf(key.charAt(keyIndex++)));
+				result += encrypt ? ceasarEncrypt(Character.toString(input.charAt(i)), ALPHABET.indexOf(key.charAt(keyIndex++))) : ceasarDecrypt(Character.toString(input.charAt(i)), ALPHABET.indexOf(key.charAt(keyIndex++)));
 				if (keyIndex >= key.length()) {
 					keyIndex = 0;
 				}
@@ -130,94 +130,110 @@ public class CipherTools {
 		return vigenere(vigenere, key, false);
 	}
 
-	public static String railFenceEncrypt(String message, int rails) throws IllegalArgumentException {
+	private static String railFence(String input, int rails, boolean encrypt) throws IllegalArgumentException {
 		if (rails < 0) {
 			throw new IllegalArgumentException();
 		}
 		if (rails == 1) {
-			return message;
+			return input;
 		} else {
 			int completeCycle = (2 * rails) - 2;
 			int[] lettersPerRail = new int[rails];
-			lettersPerRail[0] = message.length() / completeCycle;
+			lettersPerRail[0] = input.length() / completeCycle;
 			lettersPerRail[rails - 1] = lettersPerRail[0];
 
 			for (int i = 1; i < rails - 1; i++) {
 				lettersPerRail[i] = 2 * lettersPerRail[0];
 			}
 
-			for (int i = 0; i < message.length() % completeCycle; i++) {
+			for (int i = 0; i < input.length() % completeCycle; i++) {
 				lettersPerRail[i] += 1;
 			}
 
-			int[][] lettersToSameRow = new int[rails][2]; //0 is down, 1 is up (e.g. [2][0] would give the number of letters until you get to the third rail again when you are currently going down)
-			lettersToSameRow[0][0] = completeCycle;
-			lettersToSameRow[0][1] = completeCycle;
-			lettersToSameRow[rails - 1][0] = completeCycle;
-			lettersToSameRow[rails - 1][1] = completeCycle;
+			if (encrypt) {
+				int[][] lettersToSameRail = new int[rails][2]; //0 is down, 1 is up (e.g. [2][0] would give the number of letters until you get to the third rail again when you are currently going down)
+				lettersToSameRail[0][0] = completeCycle;
+				lettersToSameRail[0][1] = completeCycle;
+				lettersToSameRail[rails - 1][0] = completeCycle;
+				lettersToSameRail[rails - 1][1] = completeCycle;
 
-			for (int i = 1; i < Math.ceil((rails - 2) / 2.0) + 1; i++) { //Math.ceil((rails - 2) / 2.0) will yield the half the number of middle rows (plus the absolute middle if there is one), only half is needed because symmetry can be used for half
-				if (i == Math.ceil((rails - 2) / 2.0) && rails % 2 == 1) {
-					lettersToSameRow[i][0] = completeCycle / 2;
-					lettersToSameRow[i][1] = completeCycle / 2;
-				} else {
-					lettersToSameRow[i][0] = completeCycle - (2 * i);
-					lettersToSameRow[i][1] = completeCycle - lettersToSameRow[i][0];
-					lettersToSameRow[rails - 1 - i][1] = lettersToSameRow[i][0];
-					lettersToSameRow[rails - 1 - i][0] = lettersToSameRow[i][1];
-				}
-			}
-
-			String railFence = "";
-
-			for (int i = 0; i < rails; i++) {
-				for (int j = 0; j < lettersPerRail[i]; j++) {
-					int totalLetters = i;
-					for (int k = 0; k < j; k++) {
-						totalLetters += lettersToSameRow[i][k % 2 == 0 ? 0 : 1];
+				for (int i = 1; i < (int) Math.ceil((rails - 2) / 2.0) + 1; i++) { //Math.ceil((rails - 2) / 2.0) will yield the half the number of middle rows (plus the absolute middle if there is one), only half is needed because symmetry can be used for half
+					if (i == (int) Math.ceil((rails - 2) / 2.0) && rails % 2 == 1) {
+						lettersToSameRail[i][0] = completeCycle / 2;
+						lettersToSameRail[i][1] = completeCycle / 2;
+					} else {
+						lettersToSameRail[i][0] = completeCycle - (2 * i);
+						lettersToSameRail[i][1] = completeCycle - lettersToSameRail[i][0];
+						lettersToSameRail[rails - 1 - i][1] = lettersToSameRail[i][0];
+						lettersToSameRail[rails - 1 - i][0] = lettersToSameRail[i][1];
 					}
-					railFence += message.charAt(totalLetters);
 				}
-			}
 
-			return railFence;
+				String railFence = "";
+
+				for (int i = 0; i < rails; i++) {
+					for (int j = 0; j < lettersPerRail[i]; j++) {
+						int totalLetters = i;
+						for (int k = 0; k < j; k++) {
+							totalLetters += lettersToSameRail[i][k % 2 == 0 ? 0 : 1];
+						}
+						railFence += input.charAt(totalLetters);
+					}
+				}
+
+				return railFence;
+			} else {
+				int[] railCounter = new int[rails];
+				String message = "";
+
+				for (int i = 0; i < input.length(); i++) {
+					int railOn = i % completeCycle;
+					railOn = railOn < rails ? railOn : completeCycle - railOn;
+					int lettersIn = railCounter[railOn]++;
+					for (int j = 0; j < railOn; j++) {
+						lettersIn += lettersPerRail[j];
+					}
+					message += input.charAt(lettersIn);
+				}
+
+				return message;
+			}
 		}
 	}
 
+	public static String railFenceEncrypt(String message, int rails) throws IllegalArgumentException {
+		return railFence(message, rails, true);
+	}
+
 	public static String railFenceDecrypt(String railFence, int rails) throws IllegalArgumentException {
-		if (rails < 0) {
+		return railFence(railFence, rails, false);
+	}
+
+	public static String columnarEncrypt(String message, String key) throws IllegalArgumentException {
+		key = key.trim().toUpperCase();
+		Pattern p = Pattern.compile("^$|(?![A-Z]).");
+		Matcher m = p.matcher(key);
+		if (m.find()) {
 			throw new IllegalArgumentException();
 		}
-		if (rails == 1) {
-			return railFence;
-		} else {
-			int completeCycle = (2 * rails) - 2;
-			int[] lettersPerRail = new int[rails];
-			lettersPerRail[0] = railFence.length() / completeCycle;
-			lettersPerRail[rails - 1] = lettersPerRail[0];
+		char[][] matrix = new char[key.length()][(int) Math.ceil((double) message.length() / key.length())]; //[col][row]
 
-			for (int i = 1; i < rails - 1; i++) {
-				lettersPerRail[i] = 2 * lettersPerRail[0];
-			}
-
-			for (int i = 0; i < railFence.length() % completeCycle; i++) {
-				lettersPerRail[i] += 1;
-			}
-
-			int[] railCounter = new int[rails];
-			String message = "";
-
-			for (int i = 0; i < railFence.length(); i++) {
-				int railOn = i % completeCycle;
-				railOn = railOn < rails ? railOn : completeCycle - railOn;
-				int lettersIn = railCounter[railOn]++;
-				for (int j = 0; j < railOn; j++) {
-					lettersIn += lettersPerRail[j];
-				}
-				message += railFence.charAt(lettersIn);
-			}
-
-			return message;
+		for (int i = 0; i < message.length(); i++) {
+			matrix[i % key.length()][i / key.length()] = message.charAt(i);
 		}
+
+		String columnar = "";
+
+		for (int i = 0; i < ALPHABET.length(); i++) {
+			for (int j = 0; j < key.length(); j++) {
+				if (key.charAt(j) == ALPHABET.charAt(i)) {
+					for (int k = 0; k < matrix[j].length; k++) {
+						columnar += matrix[j][k];
+					}
+				}
+			}
+		}
+
+		return columnar;
 	}
 }

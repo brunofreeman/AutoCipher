@@ -8,10 +8,49 @@ public class CipherTester {
 	public static void main(String[] args) {
 		boolean terminated = false;
 		while (!terminated) {
-			System.out.print("What cipher would you like to test?\n1) Atbash\n2) Ceasar\n3) A1Z26\n4) Vigen\u00E9re\n5) Rail Fence\n6) None, exit program\nChoice: ");
+			System.out.print("What cipher would you like to use?\n1) Atbash\n2) Ceasar\n3) A1Z26\n4) Vigen\u00E9re\n5) Rail Fence\n6) Columnar\n7) None, exit program\nChoice: ");
 			String choice = input.nextLine().trim();
 			terminated = executeChoice(choice);
 		}
+	}
+
+	private static String getKey() {
+		String key = "";
+		boolean valid = false;
+		System.out.print("Enter the key: ");
+
+		while (!valid) {
+			key = input.nextLine().trim().toUpperCase();
+			Pattern p = Pattern.compile("^$|(?![A-Z]).");
+			Matcher m = p.matcher(key);
+			if (m.find()) {	
+				System.out.print("Invalid selection. Enter the key: ");
+			} else {
+				valid = true;
+			}
+		}
+
+		return key;
+	}
+
+	private static int getInt(String message) {
+		int integer = 0;
+		boolean valid = false;
+		System.out.print(message);
+
+		while (!valid) {
+			String intStr = input.nextLine().trim();
+			Pattern p = Pattern.compile("^$|(?![0-9]).");
+			Matcher m = p.matcher(intStr);
+			if (m.find()) {	
+				System.out.print("Invalid selection. " + message);
+			} else {
+				integer = Integer.parseInt(intStr);
+				valid = true;
+			}
+		}
+
+		return integer;
 	}
 
 	private static boolean executeChoice(String choice) {
@@ -32,6 +71,9 @@ public class CipherTester {
 					testRailFence();
 					break;
 				case "6":
+					testColumnar();
+					break;
+				case "7":
 					return true;
 				default:
 					System.out.print("Invalid selection.\nChoice: ");
@@ -80,16 +122,15 @@ public class CipherTester {
 	}
 
 	private static boolean executeCeasarChoice(String choice) {
-		boolean valid = false;
 		int shift = 0;
 		switch (choice) {
 				case "1":
-					shift = getCeasarShift();
+					shift = CipherTools.mod(getInt("Enter the shift: "), 26);
 					System.out.print("Enter the message to encrypt with Ceasar, shift of " + shift % 26 + ": ");
 					System.out.println("Encrypted message: " + CipherTools.ceasarEncrypt(input.nextLine(), shift));
 					break;
 				case "2":
-					shift = getCeasarShift();
+					shift = CipherTools.mod(getInt("Enter the shift: "), 26);
 					System.out.print("Enter the message to decrypt from Ceasar, shift of " + shift % 26 + ": ");
 					System.out.println("Decrypted message: " + CipherTools.ceasarDecrypt(input.nextLine(), shift));
 					break;
@@ -103,7 +144,7 @@ public class CipherTester {
 		return false;
 	}
 
-	private static int getCeasarShift() {
+	/*private static int getCeasarShift() {
 		int shift = 0;
 		boolean valid = false;
 		System.out.print("Enter the shift: ");
@@ -119,7 +160,7 @@ public class CipherTester {
 			}
 		}
 		return CipherTools.mod(shift, 26);
-	}
+	}*/
 
 	private static void testA1z26() {
 		boolean terminated = false;
@@ -163,12 +204,12 @@ public class CipherTester {
 		String key = "";
 		switch (choice) {
 				case "1":
-					key = getVigenereKey();
+					key = getKey();
 					System.out.print("Enter the message to encrypt with Vigen\u00E9re, key of \"" + key + "\": ");
 					System.out.println("Encrypted message: " + CipherTools.vigenereEncrypt(input.nextLine(), key));
 					break;
 				case "2":
-					key = getVigenereKey();
+					key = getKey();
 					System.out.print("Enter the message to decrypt from Vigen\u00E9re, key of \"" + key + "\": ");
 					System.out.println("Decrypted message: " + CipherTools.vigenereDecrypt(input.nextLine(), key));
 					break;
@@ -177,26 +218,9 @@ public class CipherTester {
 				default:
 					System.out.print("Invalid selection.\nChoice: ");
 					String newChoice = input.nextLine().trim();
-					return executeCeasarChoice(newChoice);
+					return executeVigenereChoice(newChoice);
 		}
 		return false;
-	}
-
-	private static String getVigenereKey() {
-		String key = "";
-		boolean valid = false;
-		System.out.print("Enter the key: ");
-		while (!valid) {
-			key = input.nextLine().trim().toUpperCase();
-			Pattern p = Pattern.compile("^$|(?![A-Z]).");
-			Matcher m = p.matcher(key);
-			if (m.find()) {	
-				System.out.print("Invalid selection. Enter the key: ");
-			} else {
-				valid = true;
-			}
-		}
-		return key;
 	}
 
 	private static void testRailFence() {
@@ -209,16 +233,15 @@ public class CipherTester {
 	}
 
 	private static boolean executeRailFenceChoice(String choice) {
-		boolean valid = false;
 		int rails = 0;
 		switch (choice) {
 				case "1":
-					rails = getRailFenceRails();
+					rails = getInt("Enter the number of rails: ");
 					System.out.print("Enter the message to encrypt with Rail Fence, " + rails + " rails: ");
 					System.out.println("Encrypted message: " + CipherTools.railFenceEncrypt(input.nextLine(), rails));
 					break;
 				case "2":
-					rails = getRailFenceRails();
+					rails = getInt("Enter the number of rails: ");
 					System.out.print("Enter the message to decrypt from Rail Fence, " + rails + " rails: ");
 					System.out.println("Decrypted message: " + CipherTools.railFenceDecrypt(input.nextLine(), rails));
 					break;
@@ -227,12 +250,12 @@ public class CipherTester {
 				default:
 					System.out.print("Invalid selection.\nChoice: ");
 					String newChoice = input.nextLine().trim();
-					return executeCeasarChoice(newChoice);
+					return executeRailFenceChoice(newChoice);
 		}
 		return false;
 	}
 
-	private static int getRailFenceRails() {
+	/*private static int getRailFenceRails() {
 		int rails = 0;
 		boolean valid = false;
 		System.out.print("Enter the number of rails: ");
@@ -252,5 +275,38 @@ public class CipherTester {
 			}
 		}
 		return rails;
+	}*/
+
+	private static void testColumnar() {
+		boolean terminated = false;
+		while (!terminated) {
+			System.out.print("What would you like to do?\n1) Encrypt with Columnar\n2) Decrypt from Columnar\n3) Return to previous menu\nChoice: ");
+			String choice = input.nextLine().trim();
+			terminated = executeColumnarChoice(choice);
+		}
+	}
+
+	private static boolean executeColumnarChoice(String choice) {
+		String key = "";
+		int columnLength = 0;
+		switch (choice) {
+				case "1":
+					key = getKey();
+					System.out.print("Enter the message to encrypt with Columnar, key of " + key + ": ");
+					System.out.println("Encrypted message: " + CipherTools.columnarEncrypt(input.nextLine(), key));
+					break;
+				case "2":
+					//key = getKey();
+					//System.out.print("Enter the message to decrypt from Columnar, key of " + key + ": ");
+					//System.out.println("Decrypted message: " + CipherTools.columnarDecrypt(input.nextLine(), key));
+					break;
+				case "3":
+					return true;
+				default:
+					System.out.print("Invalid selection.\nChoice: ");
+					String newChoice = input.nextLine().trim();
+					return executeColumnarChoice(newChoice);
+		}
+		return false;
 	}
 }
