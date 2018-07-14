@@ -1,5 +1,6 @@
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
+import java.util.Arrays;
 
 public class CipherTools {
 
@@ -17,6 +18,24 @@ public class CipherTools {
 
 	public static int mod(int dividend, int divisor) {
 		return ((dividend % divisor) + divisor) % divisor;
+	}
+
+	public static int indexOf(int[] array, int target) {
+		for (int i = 0; i < array.length; i++) {
+			if (array[i] == target) {
+				return i;
+			}
+		}
+
+		return -1;
+	}
+
+	public static void validateKey(String key) throws IllegalArgumentException {
+		Pattern p = Pattern.compile("^$|(?![A-Z]).");
+		Matcher m = p.matcher(key);
+		if (m.find()) {
+			throw new IllegalArgumentException();
+		}
 	}
     	
 	public static String atbashEncrypt(String message) {
@@ -101,11 +120,7 @@ public class CipherTools {
 		String inputUp = input.toUpperCase();
 		String result = "";
 		key = key.trim().toUpperCase();
-		Pattern p = Pattern.compile("^$|(?![A-Z]).");
-		Matcher m = p.matcher(key);
-		if (m.find()) {
-			throw new IllegalArgumentException();
-		}
+		validateKey(key);
 		int keyIndex = 0;
 
 		for (int i = 0; i < input.length(); i++) {
@@ -147,7 +162,7 @@ public class CipherTools {
 			}
 
 			for (int i = 0; i < input.length() % completeCycle; i++) {
-				lettersPerRail[i] += 1;
+				lettersPerRail[i]++;
 			}
 
 			if (encrypt) {
@@ -211,11 +226,7 @@ public class CipherTools {
 
 	public static String columnarEncrypt(String message, String key) throws IllegalArgumentException {
 		key = key.trim().toUpperCase();
-		Pattern p = Pattern.compile("^$|(?![A-Z]).");
-		Matcher m = p.matcher(key);
-		if (m.find()) {
-			throw new IllegalArgumentException();
-		}
+		validateKey(key);
 		char[][] matrix = new char[key.length()][(int) Math.ceil((double) message.length() / key.length())]; //[col][row]
 
 		for (int i = 0; i < message.length(); i++) {
@@ -235,5 +246,42 @@ public class CipherTools {
 		}
 
 		return columnar;
+	}
+
+	public static String columnarDecrypt(String columnar, String key) throws IllegalArgumentException {
+		key = key.trim().toUpperCase();
+		validateKey(key);
+		int[] lettersPerColumn = new int[key.length()];
+
+		for (int i = 0; i < lettersPerColumn.length; i++) {
+			lettersPerColumn[i] = columnar.length() / key.length();
+		}
+
+		for (int i = 0; i < columnar.length() % key.length(); i++) {
+			lettersPerColumn[i]++;
+		}
+
+		int[] order = new int[key.length()];
+		int count = 0;
+
+		for (int i = 0; i < ALPHABET.length(); i++) {
+			for (int j = 0; j < key.length(); j++) {
+				if (key.charAt(j) == ALPHABET.charAt(i)) {
+					order[j] = count++;
+				}
+			}
+		}
+
+		String message = "";
+
+		for (int i = 0; i < columnar.length(); i++) {
+			int totalLetters = i / key.length();
+			for (int j = 0; j < order[i % key.length()]; j++) {
+				totalLetters += lettersPerColumn[indexOf(order, j)];
+			}
+			message += columnar.charAt(totalLetters);
+		}
+
+		return message;
 	}
 }

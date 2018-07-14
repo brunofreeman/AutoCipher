@@ -144,24 +144,6 @@ public class CipherTester {
 		return false;
 	}
 
-	/*private static int getCeasarShift() {
-		int shift = 0;
-		boolean valid = false;
-		System.out.print("Enter the shift: ");
-		while (!valid) {
-			String shiftStr = input.nextLine().trim();
-			Pattern p = Pattern.compile("^$|(?![0-9]).");
-			Matcher m = p.matcher(shiftStr);
-			if (m.find()) {	
-				System.out.print("Invalid selection. Enter the shift: ");
-			} else {
-				shift = Integer.parseInt(shiftStr);
-				valid = true;
-			}
-		}
-		return CipherTools.mod(shift, 26);
-	}*/
-
 	private static void testA1z26() {
 		boolean terminated = false;
 		while (!terminated) {
@@ -255,28 +237,6 @@ public class CipherTester {
 		return false;
 	}
 
-	/*private static int getRailFenceRails() {
-		int rails = 0;
-		boolean valid = false;
-		System.out.print("Enter the number of rails: ");
-		while (!valid) {
-			String railsStr = input.nextLine().trim();
-			Pattern p = Pattern.compile("^$|(?![0-9]).");
-			Matcher m = p.matcher(railsStr);
-			if (m.find()) {	
-				System.out.print("Invalid selection. Enter the number of rails: ");
-			} else {
-				rails = Integer.parseInt(railsStr);
-				if (rails > 0) {
-					valid = true;
-				} else {
-					System.out.print("Invalid selection. Enter the number of rails: ");
-				}
-			}
-		}
-		return rails;
-	}*/
-
 	private static void testColumnar() {
 		boolean terminated = false;
 		while (!terminated) {
@@ -292,13 +252,13 @@ public class CipherTester {
 		switch (choice) {
 				case "1":
 					key = getKey();
-					System.out.print("Enter the message to encrypt with Columnar, key of " + key + ": ");
+					System.out.print("Enter the message to encrypt with Columnar, key of \"" + key + "\": ");
 					System.out.println("Encrypted message: " + CipherTools.columnarEncrypt(input.nextLine(), key));
 					break;
 				case "2":
-					//key = getKey();
-					//System.out.print("Enter the message to decrypt from Columnar, key of " + key + ": ");
-					//System.out.println("Decrypted message: " + CipherTools.columnarDecrypt(input.nextLine(), key));
+					key = getKey();
+					System.out.print("Enter the message to decrypt from Columnar, key of \"" + key + "\": ");
+					System.out.println("Decrypted message: " + CipherTools.columnarDecrypt(input.nextLine(), key));
 					break;
 				case "3":
 					return true;
