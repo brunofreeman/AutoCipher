@@ -20,6 +20,16 @@ public class CipherTools {
 		return ((dividend % divisor) + divisor) % divisor;
 	}
 
+	public static int modMultiplicativeInverse(int dividend, int divisor) {
+		for (int i = 1; i < divisor; i++) {
+			if (mod(dividend * i, divisor) == 1) {
+				return i;
+			}
+		}
+
+		return -1;
+	}
+
 	public static int indexOf(int[] array, int target) {
 		for (int i = 0; i < array.length; i++) {
 			if (array[i] == target) {
@@ -302,22 +312,30 @@ public class CipherTools {
 		return message;
 	}
 
-	public static String affineEncrypt(String message, int step, int shift) throws IllegalArgumentException {
+	private static String affine(String input, int step, int shift, boolean encrypt) throws IllegalArgumentException {
 		step = mod(step, 26);
 		shift = mod(shift, 26);
 		if (!relativelyPrime(step, 26)) {
 			throw new IllegalArgumentException();
 		}
-		String affine = "";
+		String result = "";
 
-		for (int i = 0; i < message.length(); i++) {
-			if (Character.isLetter(message.charAt(i))) {
-				affine += matchCase(ALPHABET.charAt(mod(step * ALPHABET.indexOf(message.toUpperCase().charAt(i)) + shift, 26)), message.charAt(i));
+		for (int i = 0; i < input.length(); i++) {
+			if (Character.isLetter(input.charAt(i))) {
+				result += matchCase(encrypt ? ALPHABET.charAt(mod(step * ALPHABET.indexOf(input.toUpperCase().charAt(i)) + shift, 26)) : ALPHABET.charAt(mod(modMultiplicativeInverse(step, 26) * (ALPHABET.indexOf(input.toUpperCase().charAt(i)) - shift), 26)), input.charAt(i));
 			} else {
-				affine += message.charAt(i);
+				result += result.charAt(i);
 			}
 		}
 
-		return affine;
+		return result;
+	}
+
+	public static String affineEncrypt(String message, int step, int shift) throws IllegalArgumentException {
+		return affine(message, step, shift, true);
+	}
+
+	public static String affineDecrypt(String affine, int step, int shift) throws IllegalArgumentException {
+		return affine(affine, step, shift, false);
 	}
 }

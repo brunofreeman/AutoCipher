@@ -365,10 +365,10 @@ public class CipherTester {
 					System.out.println("Encrypted message: " + CipherTools.affineEncrypt(input.nextLine(), step, shift));
 					break;
 				case "2":
-					//step = getAffineStep();
-					//shift = getInt("Enter the shift: ");
-					//System.out.print("Enter the message to decrypt from Affine, step of " + step % 26 + ", shift of " + shift % 26 + ": ");
-					//System.out.println("Decrypted message: " + CipherTools.affineDecrypt(input.nextLine(), step, shift));
+					step = getAffineStep();
+					shift = getInt("Enter the shift: ");
+					System.out.print("Enter the message to decrypt from Affine, step of " + step % 26 + ", shift of " + shift % 26 + ": ");
+					System.out.println("Decrypted message: " + CipherTools.affineDecrypt(input.nextLine(), step, shift));
 					break;
 				case "3":
 					return true;
