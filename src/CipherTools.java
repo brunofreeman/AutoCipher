@@ -30,16 +30,6 @@ public class CipherTools {
 		return -1;
 	}
 
-	public static int indexOf(int[] array, int target) {
-		for (int i = 0; i < array.length; i++) {
-			if (array[i] == target) {
-				return i;
-			}
-		}
-
-		return -1;
-	}
-
 	public static int gcd(int a, int b) { //Euclid's algorithm
 		if (b > a) {
 			int temp = a;
@@ -57,12 +47,13 @@ public class CipherTools {
 		return gcd(a, b) == 1;
 	}
 
-	public static void validateKey(String key) throws IllegalArgumentException {
+	public static boolean validKey(String key) {
 		Pattern p = Pattern.compile("^$|(?![A-Z]).");
 		Matcher m = p.matcher(key);
 		if (m.find()) {
-			throw new IllegalArgumentException();
+			return false;
 		}
+		return true;
 	}
     	
 	public static String atbashEncrypt(String message) {
@@ -147,7 +138,9 @@ public class CipherTools {
 		String inputUp = input.toUpperCase();
 		String result = "";
 		key = key.trim().toUpperCase();
-		validateKey(key);
+		if (!validKey(key)) {
+			throw new IllegalArgumentException();
+		}
 		int keyIndex = 0;
 
 		for (int i = 0; i < input.length(); i++) {
@@ -253,7 +246,9 @@ public class CipherTools {
 
 	public static String columnarEncrypt(String message, String key) throws IllegalArgumentException {
 		key = key.trim().toUpperCase();
-		validateKey(key);
+		if (!validKey(key)) {
+			throw new IllegalArgumentException();
+		}
 		char[][] matrix = new char[key.length()][(int) Math.ceil((double) message.length() / key.length())]; //[col][row]
 
 		for (int i = 0; i < message.length(); i++) {
@@ -262,7 +257,7 @@ public class CipherTools {
 
 		String columnar = "";
 
-		for (int i = 0; i < ALPHABET.length(); i++) {
+		for (int i = 0; i < 26; i++) {
 			for (int j = 0; j < key.length(); j++) {
 				if (key.charAt(j) == ALPHABET.charAt(i)) {
 					for (int k = 0; k < matrix[j].length; k++) {
@@ -277,7 +272,9 @@ public class CipherTools {
 
 	public static String columnarDecrypt(String columnar, String key) throws IllegalArgumentException {
 		key = key.trim().toUpperCase();
-		validateKey(key);
+		if (!validKey(key)) {
+			throw new IllegalArgumentException();
+		}
 		int[] lettersPerColumn = new int[key.length()];
 
 		for (int i = 0; i < lettersPerColumn.length; i++) {
@@ -291,7 +288,7 @@ public class CipherTools {
 		int[] order = new int[key.length()];
 		int count = 0;
 
-		for (int i = 0; i < ALPHABET.length(); i++) {
+		for (int i = 0; i < 26; i++) {
 			for (int j = 0; j < key.length(); j++) {
 				if (key.charAt(j) == ALPHABET.charAt(i)) {
 					order[j] = count++;
@@ -337,5 +334,112 @@ public class CipherTools {
 
 	public static String affineDecrypt(String affine, int step, int shift) throws IllegalArgumentException {
 		return affine(affine, step, shift, false);
+	}
+
+	public static int indexOf(int[] array, int target) {
+		for (int i = 0; i < array.length; i++) {
+			if (array[i] == target) {
+				return i;
+			}
+		}
+
+		return -1;
+	}
+
+	public static String quagmireIEncrypt(String message, String key, String indicator, char indicatorUnder) throws IllegalArgumentException {
+		key = key.trim().toUpperCase();
+		if (!validQuagmireKey(key)) {
+			throw new IllegalArgumentException();
+		}
+		indicator = indicator.trim().toUpperCase();
+		if (!validKey(indicator)) {
+			throw new IllegalArgumentException();
+		}
+		indicatorUnder = Character.toUpperCase(indicatorUnder);
+		if (!Character.isLetter(indicatorUnder)) {
+			throw new IllegalArgumentException();
+		}
+		char[] plaintextReference = new char[26];
+
+		for (int i = 0; i < key.length(); i ++) {
+			plaintextReference[i] = key.charAt(i);
+		}
+
+		int plaintextReferenceCount = key.length();
+
+		for (int i = 0; i < 26; i++) {
+			if (!contains(plaintextReference, ALPHABET.charAt(i))) {
+				plaintextReference[plaintextReferenceCount++] = ALPHABET.charAt(i);
+			}
+		}
+
+		char[][] ciphertextAlphabets = new char[indicator.length()][26];
+
+		for (int i = 0; i < indicator.length(); i++) {
+			ciphertextAlphabets[i] = getCiphertextAlphabet(indicator.charAt(i), indexOf(plaintextReference, indicatorUnder));
+		}
+
+		String quagmireI  = "";
+
+		for (int i = 0; i < message.length(); i++) {
+			if (Character.isLetter(message.charAt(i))) {
+				quagmireI += matchCase(ciphertextAlphabets[i % indicator.length()][indexOf(plaintextReference, Character.toUpperCase(message.charAt(i)))], message.charAt(i));
+			} else {
+				quagmireI += message.charAt(i);
+			}
+		}
+
+		return quagmireI;
+	}
+
+	public static boolean validQuagmireKey(String key) {
+		char[] chars = key.toCharArray();
+		boolean duplicates = false;
+
+		for (int i = 0; i < chars.length; i++) {
+			for (int j = i + 1; j < chars.length; j++) {
+		    	if (chars[i] == chars[j]) {
+		      		duplicates = true;
+		    	}
+		  	}
+		}
+		
+		return !duplicates && validKey(key); 	
+	}
+
+	public static boolean contains(char[] array, char target) {
+		for (int i = 0; i < array.length; i++) {
+			if (array[i] == target) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	public static char[] getCiphertextAlphabet(char ref, int refPos) {
+		char[] ciphertextAlphabet = new char[26];
+
+		for (int i = 0; i < 26; i++) {
+			ciphertextAlphabet[i] = ALPHABET.charAt(mod(ALPHABET.indexOf(ref) - refPos + i, 26));
+		}
+
+		/*ciphertextAlphabet[refPos] = ref;
+
+		for (int i = refPos + 1; i < 26; i++) {
+			ciphertextAlphabet[i] = ALPHABET.charAt(ALPHABET.indexOf(ref) -)
+		}*/
+
+		return ciphertextAlphabet;
+	}
+
+	public static int indexOf(char[] array, char target) {
+		for (int i = 0; i < array.length; i++) {
+			if (array[i] == target) {
+				return i;
+			}
+		}
+
+		return -1;
 	}
 }

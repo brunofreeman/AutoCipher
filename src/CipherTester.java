@@ -35,7 +35,7 @@ public class CipherTester {
 	public static void testSubstitution() {
 		boolean terminated = false;
 		while (!terminated) {
-			System.out.print("What substitution cipher would you like to use?\n1) Atbash\n2) Ceasar\n3) A1Z26\n4) Vigen\u00E9re\n5) Affine\n6) None, return to previous menu\nChoice: ");
+			System.out.print("What substitution cipher would you like to use?\n1) Atbash\n2) Ceasar\n3) A1Z26\n4) Vigen\u00E9re\n5) Affine\n6) Quagmire\n7) None, return to previous menu\nChoice: ");
 			String choice = input.nextLine().trim();
 			terminated = executeSubstitutionChoice(choice);
 		}
@@ -59,6 +59,9 @@ public class CipherTester {
 					testAffine();
 					break;
 				case "6":
+					testQuagmire();
+					break;
+				case "7":
 					return true;
 				default:
 					System.out.print("Invalid selection.\nChoice: ");
@@ -95,23 +98,25 @@ public class CipherTester {
 		return false;
 	}
 
-	private static String getKey() {
+	private static String getKey(String keyName) {
 		String key = "";
 		boolean valid = false;
-		System.out.print("Enter the key: ");
+		System.out.print("Enter the " + keyName + ": ");
 
 		while (!valid) {
 			key = input.nextLine().trim().toUpperCase();
-			Pattern p = Pattern.compile("^$|(?![A-Z]).");
-			Matcher m = p.matcher(key);
-			if (m.find()) {	
-				System.out.print("Invalid selection. Enter the key: ");
+			if (!CipherTools.validKey(key)) {	
+				System.out.print("Invalid selection. Enter the " + keyName + ": ");
 			} else {
 				valid = true;
 			}
 		}
 
 		return key;
+	}
+
+	private static String getKey() {
+		return getKey("key");
 	}
 
 	private static int getInt(String message) {
@@ -402,5 +407,106 @@ public class CipherTester {
 		}
 
 		return step;
+	}
+
+	public static void testQuagmire() {
+		boolean terminated = false;
+		while (!terminated) {
+			System.out.print("What Quagmire cipher would you like to use?\n1) Quagmire I\n2) Quagmire II\n3) Quagmire III\n4) Quagmire IV\n5) None, return to previous menu\nChoice: ");
+			String choice = input.nextLine().trim();
+			terminated = executeQuagmireChoice(choice);
+		}
+	}
+
+	private static boolean executeQuagmireChoice(String choice) {
+		switch (choice) {
+				case "1":
+					testQuagmireI();
+					break;
+				case "2":
+					//testQuagmireII();
+					break;
+				case "3":
+					//testQuagmireIII(); 
+					break;
+				case "4":
+					//testQuagmireIV();
+					break;
+				case "5":
+					return true;
+				default:
+					System.out.print("Invalid selection.\nChoice: ");
+					String newChoice = input.nextLine().trim();
+					return executeQuagmireChoice(newChoice);
+		}
+		return false;
+	}
+
+	private static void testQuagmireI() {
+		boolean terminated = false;
+		while (!terminated) {
+			System.out.print("What would you like to do?\n1) Encrypt with Quagmire I\n2) Decrypt from Quagmire I\n3) Return to previous menu\nChoice: ");
+			String choice = input.nextLine().trim();
+			terminated = executeQuagmireIChoice(choice);
+		}
+	}
+
+	private static boolean executeQuagmireIChoice(String choice) {
+		String key = "";
+		String indicator = "";
+		char indicatorUnder;
+		switch (choice) {
+				case "1":
+					key = getQuagmireKey();
+					indicator = getKey("indicator key");
+					indicatorUnder = getIndicatorUnder();
+					System.out.print("Enter the message to encrypt with Quagmire I, key of \"" + key + "\" and indicator key of \"" + indicator + "\", under the letter \"" + indicatorUnder + "\": ");
+					System.out.println("Encrypted message: " + CipherTools.quagmireIEncrypt(input.nextLine(), key, indicator, indicatorUnder));
+					break;
+				case "2":
+					break;
+				case "3":
+					return true;
+				default:
+					System.out.print("Invalid selection.\nChoice: ");
+					String newChoice = input.nextLine().trim();
+					return executeQuagmireIChoice(newChoice);
+		}
+		return false;
+	}
+
+	private static String getQuagmireKey() {
+		String key = "";
+		boolean valid = false;
+		System.out.print("Enter the key, must not repeat any letters: ");
+
+		while (!valid) {
+			key = input.nextLine().trim().toUpperCase();
+			if (!CipherTools.validQuagmireKey(key)) {	
+				System.out.print("Invalid selection. Enter the key, must not repeat any letters: ");
+			} else {
+				valid = true;
+			}
+		}
+
+		return key;
+	}
+
+	private static char getIndicatorUnder() {
+		char character = ' ';
+		boolean valid = false;
+		System.out.print("Enter the letter that the indicator is under: ");
+
+		while (!valid) {
+			String charStr = input.nextLine().trim().toUpperCase();
+			character = charStr.charAt(0);
+			if (charStr.length() > 1 || !Character.isLetter(character)) {	
+				System.out.print("Invalid selection. Enter the letter that the indicator is under: ");
+			} else {
+				valid = true;
+			}
+		}
+
+		return character;
 	}
 }
