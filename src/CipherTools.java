@@ -346,50 +346,55 @@ public class CipherTools {
 		return -1;
 	}
 
-	public static String quagmireIEncrypt(String message, String key, String indicator, char indicatorUnder) throws IllegalArgumentException {
-		key = key.trim().toUpperCase();
-		if (!validQuagmireKey(key)) {
-			throw new IllegalArgumentException();
-		}
+	private static String quagmireEncrypt(String message, String plaintextKey, String ciphertextKey, String indicator, char indicatorUnder) throws IllegalArgumentException {
+		plaintextKey = plaintextKey.trim().toUpperCase();
+		ciphertextKey = ciphertextKey.trim().toUpperCase();
 		indicator = indicator.trim().toUpperCase();
-		if (!validKey(indicator)) {
-			throw new IllegalArgumentException();
-		}
 		indicatorUnder = Character.toUpperCase(indicatorUnder);
-		if (!Character.isLetter(indicatorUnder)) {
+		if (!validQuagmireKey(plaintextKey) || !validQuagmireKey(ciphertextKey) || !validKey(indicator) || !Character.isLetter(indicatorUnder)) {
 			throw new IllegalArgumentException();
 		}
-		char[] plaintextReference = new char[26];
-
-		for (int i = 0; i < key.length(); i ++) {
-			plaintextReference[i] = key.charAt(i);
-		}
-
-		int plaintextReferenceCount = key.length();
+		String plaintextAlphabet = plaintextKey;
 
 		for (int i = 0; i < 26; i++) {
-			if (!contains(plaintextReference, ALPHABET.charAt(i))) {
-				plaintextReference[plaintextReferenceCount++] = ALPHABET.charAt(i);
+			if (!plaintextAlphabet.contains(ALPHABET.substring(i, i + 1))) {
+				plaintextAlphabet += ALPHABET.charAt(i);
 			}
 		}
 
 		char[][] ciphertextAlphabets = new char[indicator.length()][26];
 
 		for (int i = 0; i < indicator.length(); i++) {
-			ciphertextAlphabets[i] = getCiphertextAlphabet(indicator.charAt(i), indexOf(plaintextReference, indicatorUnder));
+			ciphertextAlphabets[i] = getCiphertextAlphabet(indicator.charAt(i), plaintextAlphabet.indexOf(indicatorUnder), ciphertextKey);
 		}
 
-		String quagmireI  = "";
+		String quagmire  = "";
 
 		for (int i = 0; i < message.length(); i++) {
 			if (Character.isLetter(message.charAt(i))) {
-				quagmireI += matchCase(ciphertextAlphabets[i % indicator.length()][indexOf(plaintextReference, Character.toUpperCase(message.charAt(i)))], message.charAt(i));
+				quagmire += matchCase(ciphertextAlphabets[i % indicator.length()][plaintextAlphabet.indexOf(Character.toUpperCase(message.charAt(i)))], message.charAt(i));
 			} else {
-				quagmireI += message.charAt(i);
+				quagmire += message.charAt(i);
 			}
 		}
 
-		return quagmireI;
+		return quagmire;
+	}
+
+	public static String quagmireIEncrypt(String message, String key, String indicator, char indicatorUnder) throws IllegalArgumentException {
+		return quagmireEncrypt(message, key, "", indicator, indicatorUnder);
+	}
+
+	public static String quagmireIIEncrypt(String message, String key, String indicator, char indicatorUnder) throws IllegalArgumentException {
+		return quagmireEncrypt(message, "", key, indicator, indicatorUnder);
+	}
+
+	public static String quagmireIIIEncrypt(String message, String key, String indicator, char indicatorUnder) throws IllegalArgumentException {
+		return quagmireEncrypt(message, key, key, indicator, indicatorUnder);
+	}
+
+	public static String quagmireIVEncrypt(String message, String plaintextKey, String ciphertextKey, String indicator, char indicatorUnder) throws IllegalArgumentException {
+		return quagmireEncrypt(message, plaintextKey, ciphertextKey, indicator, indicatorUnder);
 	}
 
 	public static boolean validQuagmireKey(String key) {
@@ -404,7 +409,7 @@ public class CipherTools {
 		  	}
 		}
 		
-		return !duplicates && validKey(key); 	
+		return key.equals("") || (!duplicates && validKey(key)); 	
 	}
 
 	public static boolean contains(char[] array, char target) {
@@ -417,29 +422,20 @@ public class CipherTools {
 		return false;
 	}
 
-	public static char[] getCiphertextAlphabet(char ref, int refPos) {
+	public static char[] getCiphertextAlphabet(char ref, int refPos, String key) {
 		char[] ciphertextAlphabet = new char[26];
+		String alphabet = key;
 
 		for (int i = 0; i < 26; i++) {
-			ciphertextAlphabet[i] = ALPHABET.charAt(mod(ALPHABET.indexOf(ref) - refPos + i, 26));
-		}
-
-		/*ciphertextAlphabet[refPos] = ref;
-
-		for (int i = refPos + 1; i < 26; i++) {
-			ciphertextAlphabet[i] = ALPHABET.charAt(ALPHABET.indexOf(ref) -)
-		}*/
-
-		return ciphertextAlphabet;
-	}
-
-	public static int indexOf(char[] array, char target) {
-		for (int i = 0; i < array.length; i++) {
-			if (array[i] == target) {
-				return i;
+			if (!alphabet.contains(ALPHABET.substring(i, i + 1))) {
+				alphabet += ALPHABET.charAt(i);
 			}
 		}
 
-		return -1;
+		for (int i = 0; i < 26; i++) {
+			ciphertextAlphabet[i] = alphabet.charAt(mod(alphabet.indexOf(ref) - refPos + i, 26));
+		}
+
+		return ciphertextAlphabet;
 	}
 }

@@ -424,13 +424,13 @@ public class CipherTester {
 					testQuagmireI();
 					break;
 				case "2":
-					//testQuagmireII();
+					testQuagmireII();
 					break;
 				case "3":
-					//testQuagmireIII(); 
+					testQuagmireIII(); 
 					break;
 				case "4":
-					//testQuagmireIV();
+					testQuagmireIV();
 					break;
 				case "5":
 					return true;
@@ -460,7 +460,7 @@ public class CipherTester {
 					key = getQuagmireKey();
 					indicator = getKey("indicator key");
 					indicatorUnder = getIndicatorUnder();
-					System.out.print("Enter the message to encrypt with Quagmire I, key of \"" + key + "\" and indicator key of \"" + indicator + "\", under the letter \"" + indicatorUnder + "\": ");
+					System.out.print("Enter the message to encrypt with Quagmire I, key of \"" + key + "\", and indicator key of \"" + indicator + "\", under the letter \"" + indicatorUnder + "\": ");
 					System.out.println("Encrypted message: " + CipherTools.quagmireIEncrypt(input.nextLine(), key, indicator, indicatorUnder));
 					break;
 				case "2":
@@ -475,21 +475,126 @@ public class CipherTester {
 		return false;
 	}
 
-	private static String getQuagmireKey() {
+	private static void testQuagmireII() {
+		boolean terminated = false;
+		while (!terminated) {
+			System.out.print("What would you like to do?\n1) Encrypt with Quagmire II\n2) Decrypt from Quagmire II\n3) Return to previous menu\nChoice: ");
+			String choice = input.nextLine().trim();
+			terminated = executeQuagmireIIChoice(choice);
+		}
+	}
+
+	private static boolean executeQuagmireIIChoice(String choice) {
+		String key = "";
+		String indicator = "";
+		char indicatorUnder;
+		switch (choice) {
+				case "1":
+					key = getQuagmireKey();
+					indicator = getKey("indicator key");
+					indicatorUnder = getIndicatorUnder();
+					System.out.print("Enter the message to encrypt with Quagmire II, key of \"" + key + "\", and indicator key of \"" + indicator + "\", under the letter \"" + indicatorUnder + "\": ");
+					System.out.println("Encrypted message: " + CipherTools.quagmireIIEncrypt(input.nextLine(), key, indicator, indicatorUnder));
+					break;
+				case "2":
+					break;
+				case "3":
+					return true;
+				default:
+					System.out.print("Invalid selection.\nChoice: ");
+					String newChoice = input.nextLine().trim();
+					return executeQuagmireIIChoice(newChoice);
+		}
+		return false;
+	}
+
+	private static void testQuagmireIII() {
+		boolean terminated = false;
+		while (!terminated) {
+			System.out.print("What would you like to do?\n1) Encrypt with Quagmire III\n2) Decrypt from Quagmire III\n3) Return to previous menu\nChoice: ");
+			String choice = input.nextLine().trim();
+			terminated = executeQuagmireIIIChoice(choice);
+		}
+	}
+
+	private static boolean executeQuagmireIIIChoice(String choice) {
+		String key = "";
+		String indicator = "";
+		char indicatorUnder;
+		switch (choice) {
+				case "1":
+					key = getQuagmireKey();
+					indicator = getKey("indicator key");
+					indicatorUnder = getIndicatorUnder();
+					System.out.print("Enter the message to encrypt with Quagmire III, key of \"" + key + "\", and indicator key of \"" + indicator + "\", under the letter \"" + indicatorUnder + "\": ");
+					System.out.println("Encrypted message: " + CipherTools.quagmireIIIEncrypt(input.nextLine(), key, indicator, indicatorUnder));
+					break;
+				case "2":
+					break;
+				case "3":
+					return true;
+				default:
+					System.out.print("Invalid selection.\nChoice: ");
+					String newChoice = input.nextLine().trim();
+					return executeQuagmireIIIChoice(newChoice);
+		}
+		return false;
+	}
+
+	private static void testQuagmireIV() {
+		boolean terminated = false;
+		while (!terminated) {
+			System.out.print("What would you like to do?\n1) Encrypt with Quagmire IV\n2) Decrypt from Quagmire IV\n3) Return to previous menu\nChoice: ");
+			String choice = input.nextLine().trim();
+			terminated = executeQuagmireIVChoice(choice);
+		}
+	}
+
+	private static boolean executeQuagmireIVChoice(String choice) {
+		String plaintextKey = "";
+		String ciphertextKey = "";
+		String indicator = "";
+		char indicatorUnder;
+		switch (choice) {
+				case "1":
+					plaintextKey = getQuagmireKey("plaintext key");
+					ciphertextKey = getQuagmireKey("ciphertext key");
+					indicator = getKey("indicator key");
+					indicatorUnder = getIndicatorUnder();
+					System.out.print("Enter the message to encrypt with Quagmire IV, plaintext key of \"" + plaintextKey + "\", ciphertext key of \"" + ciphertextKey + "\", and indicator key of \"" + indicator + "\", under the letter \"" + indicatorUnder + "\": ");
+					System.out.println("Encrypted message: " + CipherTools.quagmireIVEncrypt(input.nextLine(), plaintextKey, ciphertextKey, indicator, indicatorUnder));
+					break;
+				case "2":
+					break;
+				case "3":
+					return true;
+				default:
+					System.out.print("Invalid selection.\nChoice: ");
+					String newChoice = input.nextLine().trim();
+					return executeQuagmireIVChoice(newChoice);
+		}
+		return false;
+	}
+
+	private static String getQuagmireKey(String keyName) {
 		String key = "";
 		boolean valid = false;
-		System.out.print("Enter the key, must not repeat any letters: ");
+		System.out.print("Enter the " + keyName + ", must not repeat any letters: ");
 
 		while (!valid) {
 			key = input.nextLine().trim().toUpperCase();
 			if (!CipherTools.validQuagmireKey(key)) {	
-				System.out.print("Invalid selection. Enter the key, must not repeat any letters: ");
+				System.out.print("Invalid selection. Enter the " + keyName + ", must not repeat any letters: ");
 			} else {
 				valid = true;
 			}
 		}
 
 		return key;
+	}
+
+	private static String getQuagmireKey() {
+		return getQuagmireKey("key");
 	}
 
 	private static char getIndicatorUnder() {
