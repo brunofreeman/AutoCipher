@@ -6,7 +6,7 @@ public class CipherTools {
 
 	public static final String ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-	public static char matchCase(char toMatch, char ref) {
+	public static char matchCase(char toMatch, char ref) { //converts toMatch to the same case as ref and returns toMatch
 		int unicode = (int) ref;
 		if (unicode >= 65 && unicode <= 90) {
 			return Character.toUpperCase(toMatch);
@@ -16,17 +16,16 @@ public class CipherTools {
 		return toMatch;
 	}
 
-	public static int mod(int dividend, int divisor) {
+	public static int mod(int dividend, int divisor) { //returns mathematical modulus (different from Java % operator in some cases)
 		return ((dividend % divisor) + divisor) % divisor;
 	}
 
-	public static int modMultiplicativeInverse(int dividend, int divisor) {
+	public static int modMultiplicativeInverse(int num, int divisor) { //returns x such that x makes num*x = 1 (mod divisor)
 		for (int i = 1; i < divisor; i++) {
-			if (mod(dividend * i, divisor) == 1) {
+			if (mod(num * i, divisor) == 1) {
 				return i;
 			}
 		}
-
 		return -1;
 	}
 
@@ -47,7 +46,7 @@ public class CipherTools {
 		return gcd(a, b) == 1;
 	}
 
-	public static boolean validKey(String key) {
+	public static boolean validKey(String key) { //checks if a potential key only contains uppercase letters
 		Pattern p = Pattern.compile("^$|(?![A-Z]).");
 		Matcher m = p.matcher(key);
 		if (m.find()) {
@@ -62,7 +61,7 @@ public class CipherTools {
 
         for (int i = 0; i < message.length(); i++) {
             if (Character.isLetter(message.charAt(i))) {
-                atbash += matchCase(ALPHABET.charAt(25 - ALPHABET.indexOf(messageUp.charAt(i))), message.charAt(i));
+                atbash += matchCase(ALPHABET.charAt(25 - ALPHABET.indexOf(messageUp.charAt(i))), message.charAt(i)); //if letter, find inverse and add
             } else {
                 atbash += message.charAt(i);
             }
@@ -72,17 +71,17 @@ public class CipherTools {
 	}
 
 	public static String atbashDecrypt(String atbash) {
-		return atbashEncrypt(atbash);
+		return atbashEncrypt(atbash); //atbash encryption and decryption is the same procedure
 	}
 
 	public static String ceasarEncrypt(String message, int shift) {
 		String messageUp = message.toUpperCase();
-		shift = mod(shift, 26);
+		shift = mod(shift, 26); //if shift is negative or over 25, normalize it
 		String ceasar = "";
 
 		for (int i = 0; i < message.length(); i++) {
 			if (Character.isLetter(message.charAt(i))) {
-				ceasar += matchCase(ALPHABET.charAt(mod(ALPHABET.indexOf(messageUp.charAt(i)) + shift, 26)), message.charAt(i));
+				ceasar += matchCase(ALPHABET.charAt(mod(ALPHABET.indexOf(messageUp.charAt(i)) + shift, 26)), message.charAt(i)); //if letter, shift and add
 			} else {
 				ceasar += message.charAt(i);
 			}
@@ -92,7 +91,7 @@ public class CipherTools {
 	}
 
 	public static String ceasarDecrypt(String ceasar, int shift) {
-		return ceasarEncrypt(ceasar, -1 * shift);
+		return ceasarEncrypt(ceasar, -1 * shift); //ceasar decryption is an encryption with the negative of the original shift
 	}
 
 	public static String a1z26Encrypt(String message) {
@@ -101,31 +100,31 @@ public class CipherTools {
 
 		for (int i = 0; i < message.length(); i++) {
 			if (Character.isLetter(message.charAt(i))) {	
-				a1z26 += (ALPHABET.indexOf(message.charAt(i)) + 1) ;
+				a1z26 += (ALPHABET.indexOf(message.charAt(i)) + 1); //if letter, convert to index plus one and add 
 			} else {
 				a1z26 += message.charAt(i);
 			}
-			if (i < message.length() - 1 && Character.isLetter(message.charAt(i + 1))) {
+			if (i < message.length() - 1 && Character.isLetter(message.charAt(i + 1))) { //adds a dash between each character
 				a1z26 += "-";
 			}
 		}
 
-		a1z26 = a1z26.replaceAll(" -", " ");
+		a1z26 = a1z26.replaceAll(" -", " "); //fixes dash occurances where there should only be spaces
 		return a1z26;
 	}
 
 	public static String a1z26Decrypt(String a1z26) {
-		a1z26 = a1z26.replaceAll("(?![a-zA-Z0-9]).", "-$0-");
-		String[] parts = a1z26.split("-");
+		a1z26 = a1z26.replaceAll("(?![a-zA-Z0-9]).", "-$0-"); //adds two dashes around non-alphanumeric characters (necessary for instances like 1-2-3!)
+		String[] parts = a1z26.split("-"); //splits into an array
 		String message = "";
 
 		for (int i = 0; i < parts.length; i++) {
 			try {
-				int num = Integer.parseInt(parts[i]);
+				int num = Integer.parseInt(parts[i]); //could throw error
 				if (num < 1 || num > 26) {
 					throw new Exception();
 				}
-				message += ALPHABET.charAt(num - 1);
+				message += ALPHABET.charAt(num - 1); //convert numbers back to letters
 			} catch (Exception e) {
 				message += parts[i];
 			}
