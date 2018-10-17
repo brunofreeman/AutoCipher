@@ -143,7 +143,7 @@ public class CipherTools {
 		int keyIndex = 0;
 
 		for (int i = 0; i < input.length(); i++) {
-			if (Character.isLetter(input.charAt(i))) {
+			if (Character.isLetter(input.charAt(i))) { //if letter, check encrypt and do a appropriate ceasar encryption/decryption for letter of the key
 				result += encrypt ? ceasarEncrypt(Character.toString(input.charAt(i)), ALPHABET.indexOf(key.charAt(keyIndex++))) : ceasarDecrypt(Character.toString(input.charAt(i)), ALPHABET.indexOf(key.charAt(keyIndex++)));
 				if (keyIndex >= key.length()) {
 					keyIndex = 0;
@@ -171,16 +171,16 @@ public class CipherTools {
 		if (rails == 1) {
 			return input;
 		} else {
-			int completeCycle = (2 * rails) - 2;
+			int completeCycle = (2 * rails) - 2; //letters before cycling back to same rail in same direction
 			int[] lettersPerRail = new int[rails];
-			lettersPerRail[0] = input.length() / completeCycle;
+			lettersPerRail[0] = input.length() / completeCycle; //first and last rail are shorter
 			lettersPerRail[rails - 1] = lettersPerRail[0];
 
 			for (int i = 1; i < rails - 1; i++) {
-				lettersPerRail[i] = 2 * lettersPerRail[0];
+				lettersPerRail[i] = 2 * lettersPerRail[0]; //each middle rail will be twice the length of the top and bottom
 			}
 
-			for (int i = 0; i < input.length() % completeCycle; i++) {
+			for (int i = 0; i < input.length() % completeCycle; i++) { //add on any extra letters (that did not make a full cycle)
 				lettersPerRail[i]++;
 			}
 
@@ -191,43 +191,44 @@ public class CipherTools {
 				lettersToSameRail[rails - 1][0] = completeCycle;
 				lettersToSameRail[rails - 1][1] = completeCycle;
 
-				for (int i = 1; i < (int) Math.ceil((rails - 2) / 2.0) + 1; i++) { //Math.ceil((rails - 2) / 2.0) will yield the half the number of middle rows (plus the absolute middle if there is one), only half is needed because symmetry can be used for half
-					if (i == (int) Math.ceil((rails - 2) / 2.0) && rails % 2 == 1) {
+				int halfMiddleRails = (int) Math.ceil((rails - 2) / 2.0); //Math.ceil((rails - 2) / 2.0) will yield the half the number of middle rails (plus the absolute middle if there is one), only half is needed because symmetry can be used for half
+				for (int i = 1; i < halfMiddleRails + 1; i++) {
+					if (i == halfMiddleRails && rails % 2 == 1) { //if the rail is in the absolute middle, it is half a cycle
 						lettersToSameRail[i][0] = completeCycle / 2;
 						lettersToSameRail[i][1] = completeCycle / 2;
 					} else {
-						lettersToSameRail[i][0] = completeCycle - (2 * i);
-						lettersToSameRail[i][1] = completeCycle - lettersToSameRail[i][0];
-						lettersToSameRail[rails - 1 - i][1] = lettersToSameRail[i][0];
-						lettersToSameRail[rails - 1 - i][0] = lettersToSameRail[i][1];
+						lettersToSameRail[i][0] = completeCycle - (2 * i); //gets smaller as rail gets lower
+						lettersToSameRail[i][1] = completeCycle - lettersToSameRail[i][0]; //going up and down add to full cycle
+						lettersToSameRail[rails - 1 - i][1] = lettersToSameRail[i][0]; //symmetry
+						lettersToSameRail[rails - 1 - i][0] = lettersToSameRail[i][1]; //symmetry
 					}
 				}
 
 				String railFence = "";
 
-				for (int i = 0; i < rails; i++) {
-					for (int j = 0; j < lettersPerRail[i]; j++) {
-						int totalLetters = i;
+				for (int i = 0; i < rails; i++) { //start at top rail and work way down
+					for (int j = 0; j < lettersPerRail[i]; j++) { //iterate for every letter in the rail
+						int originalMessageIndex = i;
 						for (int k = 0; k < j; k++) {
-							totalLetters += lettersToSameRail[i][k % 2 == 0 ? 0 : 1];
+							originalMessageIndex += lettersToSameRail[i][k % 2 == 0 ? 0 : 1]; //alternating between going up and down, add half cycles to get to next letter in rail
 						}
-						railFence += input.charAt(totalLetters);
+						railFence += input.charAt(originalMessageIndex);
 					}
 				}
 
 				return railFence;
-			} else {
-				int[] railCounter = new int[rails];
+			} else { //decrypting
+				int[] railCounter = new int[rails]; //initializes to 0
 				String message = "";
 
 				for (int i = 0; i < input.length(); i++) {
 					int railOn = i % completeCycle;
 					railOn = railOn < rails ? railOn : completeCycle - railOn;
-					int lettersIn = railCounter[railOn]++;
+					int ciphertextIndex = railCounter[railOn]++; //we are looking for the n character on the rail, next time look for n+1
 					for (int j = 0; j < railOn; j++) {
-						lettersIn += lettersPerRail[j];
+						ciphertextIndex += lettersPerRail[j]; //skip all the rails that come before it
 					}
-					message += input.charAt(lettersIn);
+					message += input.charAt(ciphertextIndex);
 				}
 
 				return message;
