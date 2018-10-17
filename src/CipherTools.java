@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 public class CipherTools {
 
-	public static final String ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	public static final String ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"; //TO DO?: add more alphabets (e.g. ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789)
 
 	public static char matchCase(char toMatch, char ref) { //converts toMatch to the same case as ref and returns toMatch
 		int unicode = (int) ref;
@@ -252,15 +252,15 @@ public class CipherTools {
 		char[][] matrix = new char[key.length()][(int) Math.ceil((double) message.length() / key.length())]; //[col][row]
 
 		for (int i = 0; i < message.length(); i++) {
-			matrix[i % key.length()][i / key.length()] = message.charAt(i);
+			matrix[i % key.length()][i / key.length()] = message.charAt(i); //fill in matrix with message, going left to right, top to bottom
 		}
 
 		String columnar = "";
 
 		for (int i = 0; i < 26; i++) {
 			for (int j = 0; j < key.length(); j++) {
-				if (key.charAt(j) == ALPHABET.charAt(i)) {
-					for (int k = 0; k < matrix[j].length; k++) {
+				if (key.charAt(j) == ALPHABET.charAt(i)) { //goes to each column alphabetically, going with the leftmost in the key if there is a repeat
+					for (int k = 0; k < matrix[j].length; k++) { //from top to bottom, add column to ciphertext
 						columnar += matrix[j][k];
 					}
 				}
@@ -277,11 +277,11 @@ public class CipherTools {
 		}
 		int[] lettersPerColumn = new int[key.length()];
 
-		for (int i = 0; i < lettersPerColumn.length; i++) {
+		for (int i = 0; i < lettersPerColumn.length; i++) { //set base length of columns
 			lettersPerColumn[i] = columnar.length() / key.length();
 		}
 
-		for (int i = 0; i < columnar.length() % key.length(); i++) {
+		for (int i = 0; i < columnar.length() % key.length(); i++) { //add any remainder to starting columns
 			lettersPerColumn[i]++;
 		}
 
@@ -290,7 +290,7 @@ public class CipherTools {
 
 		for (int i = 0; i < 26; i++) {
 			for (int j = 0; j < key.length(); j++) {
-				if (key.charAt(j) == ALPHABET.charAt(i)) {
+				if (key.charAt(j) == ALPHABET.charAt(i)) { //orders columns alphabetically, going with the leftmost in the key if there is a repeat
 					order[j] = count++;
 				}
 			}
@@ -299,26 +299,26 @@ public class CipherTools {
 		String message = "";
 
 		for (int i = 0; i < columnar.length(); i++) {
-			int totalLetters = i / key.length();
-			for (int j = 0; j < order[i % key.length()]; j++) {
-				totalLetters += lettersPerColumn[indexOf(order, j)];
+			int ciphertextIndex = i / key.length(); //start at correct row
+			for (int j = 0; j < order[i % key.length()]; j++) { //for each column the index is past
+				ciphertextIndex += lettersPerColumn[indexOf(order, j)]; //add length of column
 			}
-			message += columnar.charAt(totalLetters);
+			message += columnar.charAt(ciphertextIndex);
 		}
 
 		return message;
 	}
 
 	private static String affine(String input, int step, int shift, boolean encrypt) throws IllegalArgumentException {
-		step = mod(step, 26);
-		shift = mod(shift, 26);
+		step = mod(step, 26); //normalize
+		shift = mod(shift, 26); //normalize
 		if (!relativelyPrime(step, 26)) {
 			throw new IllegalArgumentException();
 		}
 		String result = "";
 
 		for (int i = 0; i < input.length(); i++) {
-			if (Character.isLetter(input.charAt(i))) {
+			if (Character.isLetter(input.charAt(i))) { //uses formula based on if encrypting or decrypting, uses modulus and shift to essentially do a ceasar and then do even jumps between letters
 				result += matchCase(encrypt ? ALPHABET.charAt(mod(step * ALPHABET.indexOf(input.toUpperCase().charAt(i)) + shift, 26)) : ALPHABET.charAt(mod(modMultiplicativeInverse(step, 26) * (ALPHABET.indexOf(input.toUpperCase().charAt(i)) - shift), 26)), input.charAt(i));
 			} else {
 				result += result.charAt(i);
