@@ -224,7 +224,7 @@ public class CipherTools {
 				for (int i = 0; i < input.length(); i++) {
 					int railOn = i % completeCycle;
 					railOn = railOn < rails ? railOn : completeCycle - railOn;
-					int ciphertextIndex = railCounter[railOn]++; //we are looking for the n character on the rail, next time look for n+1
+					int ciphertextIndex = railCounter[railOn]++; //looking for the n character on the rail, next time look for n+1
 					for (int j = 0; j < railOn; j++) {
 						ciphertextIndex += lettersPerRail[j]; //skip all the rails that come before it
 					}
@@ -371,7 +371,7 @@ public class CipherTools {
 		String quagmire  = "";
 
 		for (int i = 0; i < message.length(); i++) {
-			if (Character.isLetter(message.charAt(i))) {
+			if (Character.isLetter(message.charAt(i))) { //if letter, cycling through letters of indicator, replace each letter of the original message with letter from appropriate cipher alphabet
 				quagmire += matchCase(ciphertextAlphabets[i % indicator.length()][plaintextAlphabet.indexOf(Character.toUpperCase(message.charAt(i)))], message.charAt(i));
 			} else {
 				quagmire += message.charAt(i);
@@ -382,22 +382,22 @@ public class CipherTools {
 	}
 
 	public static String quagmireIEncrypt(String message, String key, String indicator, char indicatorUnder) throws IllegalArgumentException {
-		return quagmireEncrypt(message, key, "", indicator, indicatorUnder);
+		return quagmireEncrypt(message, key, "", indicator, indicatorUnder); //no ciphertext key
 	}
 
 	public static String quagmireIIEncrypt(String message, String key, String indicator, char indicatorUnder) throws IllegalArgumentException {
-		return quagmireEncrypt(message, "", key, indicator, indicatorUnder);
+		return quagmireEncrypt(message, "", key, indicator, indicatorUnder); //no plaintext key
 	}
 
 	public static String quagmireIIIEncrypt(String message, String key, String indicator, char indicatorUnder) throws IllegalArgumentException {
-		return quagmireEncrypt(message, key, key, indicator, indicatorUnder);
+		return quagmireEncrypt(message, key, key, indicator, indicatorUnder); //plaintext key and ciphertext key are the same
 	}
 
 	public static String quagmireIVEncrypt(String message, String plaintextKey, String ciphertextKey, String indicator, char indicatorUnder) throws IllegalArgumentException {
-		return quagmireEncrypt(message, plaintextKey, ciphertextKey, indicator, indicatorUnder);
+		return quagmireEncrypt(message, plaintextKey, ciphertextKey, indicator, indicatorUnder); //plaintext key and ciphertext key are didfferent
 	}
 
-	public static boolean validQuagmireKey(String key) {
+	public static boolean validQuagmireKey(String key) { //quagmire keys can't repeat letters
 		char[] chars = key.toCharArray();
 		boolean duplicates = false;
 
@@ -422,7 +422,7 @@ public class CipherTools {
 		return false;
 	}
 
-	public static char[] getCiphertextAlphabet(char ref, int refPos, String key) {
+	public static char[] getCiphertextAlphabet(char ref, int refPos, String key) { //will start with key then rest of alphabet in order, shift to match ref and refPos
 		char[] ciphertextAlphabet = new char[26];
 		String alphabet = key;
 
