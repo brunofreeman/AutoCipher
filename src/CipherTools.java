@@ -356,7 +356,7 @@ public class CipherTools {
 		}
 		String plaintextAlphabet = plaintextKey;
 
-		for (int i = 0; i < 26; i++) {
+		for (int i = 0; i < 26; i++) { //adds the rest of the alphabet that does not appear in the plaintext key to the end of the key in order
 			if (!plaintextAlphabet.contains(ALPHABET.substring(i, i + 1))) {
 				plaintextAlphabet += ALPHABET.charAt(i);
 			}
@@ -364,7 +364,7 @@ public class CipherTools {
 
 		char[][] ciphertextAlphabets = new char[indicator.length()][26];
 
-		for (int i = 0; i < indicator.length(); i++) {
+		for (int i = 0; i < indicator.length(); i++) { //uses the indicator to shift around a normal alphabet to make the cipher alphabets
 			ciphertextAlphabets[i] = getCiphertextAlphabet(indicator.charAt(i), plaintextAlphabet.indexOf(indicatorUnder), ciphertextKey);
 		}
 
