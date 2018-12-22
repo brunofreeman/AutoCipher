@@ -1,6 +1,7 @@
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 import java.util.Arrays;
+import java.util.HashMap;
 
 public class CipherTools {
 
@@ -458,5 +459,53 @@ public class CipherTools {
 			}
 		}
 		return -1;
+	}
+
+	public static String baconianEncrypt(String message) {
+		HashMap<Character, String> baconianMap = new HashMap<>();
+		baconianMap.put('A', "AAAAA");
+		baconianMap.put('B', "AAAAB");
+		baconianMap.put('C', "AAABA");
+		baconianMap.put('D', "AAABB");
+		baconianMap.put('E', "AABAA");
+		baconianMap.put('F', "AABAB");
+		baconianMap.put('G', "AABBA");
+		baconianMap.put('H', "AABBB");
+		baconianMap.put('I', "ABAAA");
+		baconianMap.put('J', "ABAAB");
+		baconianMap.put('K', "ABABA");
+		baconianMap.put('L', "ABABB");
+		baconianMap.put('M', "ABBAA");
+		baconianMap.put('N', "ABBAB");
+		baconianMap.put('O', "ABBBA");
+		baconianMap.put('P', "ABBBB");
+		baconianMap.put('Q', "BAAAA");
+		baconianMap.put('R', "BAAAB");
+		baconianMap.put('S', "BAABA");
+		baconianMap.put('T', "BAABB");
+		baconianMap.put('U', "BABAA");
+		baconianMap.put('V', "BABAB");
+		baconianMap.put('W', "BABBA");
+		baconianMap.put('X', "BABBB");
+		baconianMap.put('Y', "BBAAA");
+		baconianMap.put('Z', "BBAAB");
+
+		String messageUp = message.toUpperCase();
+        String baconian = "";
+
+        for (int i = 0; i < message.length(); i++) {
+            if (Character.isLetter(message.charAt(i))) {
+                String ciphertext = baconianMap.get(Character.toUpperCase(message.charAt(i)));
+                baconian += Character.isUpperCase(message.charAt(i)) ? ciphertext : ciphertext.toLowerCase();
+            } else {
+                baconian += message.charAt(i);
+            }
+        }
+
+        return baconian;
+	}
+
+	public static String baconianDecrypt(String baconian) {
+		return "Not yet implemented.";
 	}
 }

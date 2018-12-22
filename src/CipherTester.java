@@ -35,7 +35,7 @@ public class CipherTester {
 	public static void testSubstitution() {
 		boolean terminated = false;
 		while (!terminated) {
-			System.out.print("What substitution cipher would you like to use?\n1) Atbash\n2) Ceasar\n3) A1Z26\n4) Vigen\u00E9re\n5) Affine\n6) Quagmire\n7) None, return to previous menu\nChoice: ");
+			System.out.print("What substitution cipher would you like to use?\n1) Atbash\n2) Ceasar\n3) A1Z26\n4) Vigen\u00E9re\n5) Affine\n6) Quagmire\n7) Baconian\n8) None, return to previous menu\nChoice: ");
 			String choice = input.nextLine().trim();
 			terminated = executeSubstitutionChoice(choice);
 		}
@@ -62,6 +62,9 @@ public class CipherTester {
 					testQuagmire();
 					break;
 				case "7":
+					testBaconian();
+					break;
+				case "8":
 					return true;
 				default:
 					System.out.print("Invalid selection.\nChoice: ");
@@ -635,5 +638,34 @@ public class CipherTester {
 		}
 
 		return character;
+	}
+
+	private static void testBaconian() {
+		boolean terminated = false;
+		while (!terminated) {
+			System.out.print("What would you like to do?\n1) Encrypt with Baconian\n2) Decrypt from Baconian\n3) Return to previous menu\nChoice: ");
+			String choice = input.nextLine().trim();
+			terminated = executeBaconianChoice(choice);
+		}
+	}
+
+	private static boolean executeBaconianChoice(String choice) {
+		switch (choice) {
+				case "1":
+					System.out.print("Enter the message to encrypt with Baconian: ");
+					System.out.println("Encrypted message: " + CipherTools.baconianEncrypt(input.nextLine()));
+					break;
+				case "2":
+					System.out.print("Enter the message to decrypt from Baconian: ");
+					System.out.println("Decrypted message: " + CipherTools.baconianDecrypt(input.nextLine()));
+					break;
+				case "3":
+					return true;
+				default:
+					System.out.print("Invalid selection.\nChoice: ");
+					String newChoice = input.nextLine().trim();
+					return executeBaconianChoice(newChoice);
+		}
+		return false;
 	}
 }
