@@ -61,7 +61,7 @@ public class CipherTools {
 
         for (int i = 0; i < message.length(); i++) {
             if (Character.isLetter(message.charAt(i))) {
-                atbash += matchCase(ALPHABET.charAt(25 - ALPHABET.indexOf(messageUp.charAt(i))), message.charAt(i)); //if letter, find inverse and add
+                atbash += matchCase(ALPHABET.charAt(ALPHABET.length() - 1 - ALPHABET.indexOf(messageUp.charAt(i))), message.charAt(i)); //if letter, find inverse and add
             } else {
                 atbash += message.charAt(i);
             }
@@ -76,12 +76,12 @@ public class CipherTools {
 
 	public static String ceasarEncrypt(String message, int shift) {
 		String messageUp = message.toUpperCase();
-		shift = mod(shift, 26); //if shift is negative or over 25, normalize it
+		shift = mod(shift, ALPHABET.length()); //if shift is negative or over alphabet length, normalize it
 		String ceasar = "";
 
 		for (int i = 0; i < message.length(); i++) {
 			if (Character.isLetter(message.charAt(i))) {
-				ceasar += matchCase(ALPHABET.charAt(mod(ALPHABET.indexOf(messageUp.charAt(i)) + shift, 26)), message.charAt(i)); //if letter, shift and add
+				ceasar += matchCase(ALPHABET.charAt(mod(ALPHABET.indexOf(messageUp.charAt(i)) + shift, ALPHABET.length())), message.charAt(i)); //if letter, shift and add
 			} else {
 				ceasar += message.charAt(i);
 			}
@@ -121,7 +121,7 @@ public class CipherTools {
 		for (int i = 0; i < parts.length; i++) {
 			try {
 				int num = Integer.parseInt(parts[i]); //could throw error
-				if (num < 1 || num > 26) {
+				if (num < 1 || num > ALPHABET.length()) {
 					throw new Exception();
 				}
 				message += ALPHABET.charAt(num - 1); //convert numbers back to letters
@@ -135,7 +135,7 @@ public class CipherTools {
 
 	private static String vigenere(String input, String key, boolean encrypt) throws IllegalArgumentException {
 		String inputUp = input.toUpperCase();
-		String result = "";
+		String output = "";
 		key = key.trim().toUpperCase();
 		if (!validKey(key)) {
 			throw new IllegalArgumentException();
@@ -144,16 +144,16 @@ public class CipherTools {
 
 		for (int i = 0; i < input.length(); i++) {
 			if (Character.isLetter(input.charAt(i))) { //if letter, check encrypt and do a appropriate ceasar encryption/decryption for letter of the key
-				result += encrypt ? ceasarEncrypt(Character.toString(input.charAt(i)), ALPHABET.indexOf(key.charAt(keyIndex++))) : ceasarDecrypt(Character.toString(input.charAt(i)), ALPHABET.indexOf(key.charAt(keyIndex++)));
+				output += encrypt ? ceasarEncrypt(Character.toString(input.charAt(i)), ALPHABET.indexOf(key.charAt(keyIndex++))) : ceasarDecrypt(Character.toString(input.charAt(i)), ALPHABET.indexOf(key.charAt(keyIndex++)));
 				if (keyIndex >= key.length()) {
 					keyIndex = 0;
 				}
 			} else {
-				result += input.charAt(i);
+				output += input.charAt(i);
 			}
 		}
 
-		return result;
+		return output;
 	}
 
 	public static String vigenereEncrypt(String message, String key) throws IllegalArgumentException {
@@ -257,7 +257,7 @@ public class CipherTools {
 
 		String columnar = "";
 
-		for (int i = 0; i < 26; i++) {
+		for (int i = 0; i < ALPHABET.length(); i++) {
 			for (int j = 0; j < key.length(); j++) {
 				if (key.charAt(j) == ALPHABET.charAt(i)) { //goes to each column alphabetically, going with the leftmost in the key if there is a repeat
 					for (int k = 0; k < matrix[j].length; k++) { //from top to bottom, add column to ciphertext
@@ -288,7 +288,7 @@ public class CipherTools {
 		int[] order = new int[key.length()];
 		int count = 0;
 
-		for (int i = 0; i < 26; i++) {
+		for (int i = 0; i < ALPHABET.length(); i++) {
 			for (int j = 0; j < key.length(); j++) {
 				if (key.charAt(j) == ALPHABET.charAt(i)) { //orders columns alphabetically, going with the leftmost in the key if there is a repeat
 					order[j] = count++;
@@ -310,22 +310,22 @@ public class CipherTools {
 	}
 
 	private static String affine(String input, int step, int shift, boolean encrypt) throws IllegalArgumentException {
-		step = mod(step, 26); //normalize
-		shift = mod(shift, 26); //normalize
-		if (!relativelyPrime(step, 26)) {
+		step = mod(step, ALPHABET.length()); //normalize
+		shift = mod(shift, ALPHABET.length()); //normalize
+		if (!relativelyPrime(step, ALPHABET.length())) {
 			throw new IllegalArgumentException();
 		}
-		String result = "";
+		String output = "";
 
 		for (int i = 0; i < input.length(); i++) {
 			if (Character.isLetter(input.charAt(i))) { //uses formula based on if encrypting or decrypting, uses modulus and shift to essentially do a ceasar and then do even jumps between letters
-				result += matchCase(encrypt ? ALPHABET.charAt(mod(step * ALPHABET.indexOf(input.toUpperCase().charAt(i)) + shift, 26)) : ALPHABET.charAt(mod(modMultiplicativeInverse(step, 26) * (ALPHABET.indexOf(input.toUpperCase().charAt(i)) - shift), 26)), input.charAt(i));
+				output += matchCase(encrypt ? ALPHABET.charAt(mod(step * ALPHABET.indexOf(input.toUpperCase().charAt(i)) + shift, ALPHABET.length())) : ALPHABET.charAt(mod(modMultiplicativeInverse(step, ALPHABET.length()) * (ALPHABET.indexOf(input.toUpperCase().charAt(i)) - shift), ALPHABET.length())), input.charAt(i));
 			} else {
-				result += result.charAt(i);
+				output += input.charAt(i);
 			}
 		}
 
-		return result;
+		return output;
 	}
 
 	public static String affineEncrypt(String message, int step, int shift) throws IllegalArgumentException {
@@ -342,11 +342,10 @@ public class CipherTools {
 				return i;
 			}
 		}
-
 		return -1;
 	}
 
-	private static String quagmireEncrypt(String message, String plaintextKey, String ciphertextKey, String indicator, char indicatorUnder) throws IllegalArgumentException {
+	private static String quagmire(String input, String plaintextKey, String ciphertextKey, String indicator, char indicatorUnder, boolean encrypt) throws IllegalArgumentException {
 		plaintextKey = plaintextKey.trim().toUpperCase();
 		ciphertextKey = ciphertextKey.trim().toUpperCase();
 		indicator = indicator.trim().toUpperCase();
@@ -356,51 +355,74 @@ public class CipherTools {
 		}
 		String plaintextAlphabet = plaintextKey;
 
-		for (int i = 0; i < 26; i++) { //adds the rest of the alphabet that does not appear in the plaintext key to the end of the key in order
+		for (int i = 0; i < ALPHABET.length(); i++) { //adds the rest of the alphabet that does not appear in the plaintext key to the end of the key in order
 			if (!plaintextAlphabet.contains(ALPHABET.substring(i, i + 1))) {
 				plaintextAlphabet += ALPHABET.charAt(i);
 			}
 		}
 
-		char[][] ciphertextAlphabets = new char[indicator.length()][26];
+		char[][] ciphertextAlphabets = new char[indicator.length()][ALPHABET.length()];
 
 		for (int i = 0; i < indicator.length(); i++) { //uses the indicator to shift around a normal alphabet to make the cipher alphabets
 			ciphertextAlphabets[i] = getCiphertextAlphabet(indicator.charAt(i), plaintextAlphabet.indexOf(indicatorUnder), ciphertextKey);
 		}
 
-		String quagmire  = "";
+		String output = "";
 
-		for (int i = 0; i < message.length(); i++) {
-			if (Character.isLetter(message.charAt(i))) { //if letter, cycling through letters of indicator, replace each letter of the original message with letter from appropriate cipher alphabet
-				quagmire += matchCase(ciphertextAlphabets[i % indicator.length()][plaintextAlphabet.indexOf(Character.toUpperCase(message.charAt(i)))], message.charAt(i));
+		for (int i = 0; i < input.length(); i++) {
+			if (encrypt) {
+				if (Character.isLetter(input.charAt(i))) { //if letter, cycling through letters of indicator, replace each letter of the original message with letter from appropriate cipher alphabet
+					output += matchCase(ciphertextAlphabets[i % indicator.length()][plaintextAlphabet.indexOf(Character.toUpperCase(input.charAt(i)))], input.charAt(i));
+				} else {
+					output += input.charAt(i);
+				}
 			} else {
-				quagmire += message.charAt(i);
-			}
+				if (Character.isLetter(input.charAt(i))) { //if letter, replace with letter from plaintext alphabet at same position of letteer from appropriate ciphertext alphabet
+					output += matchCase(plaintextAlphabet.charAt(indexOf(ciphertextAlphabets[i % indicator.length()], Character.toUpperCase(input.charAt(i)))), input.charAt(i));
+				} else {
+					output += input.charAt(i);
+				}
+			}	
 		}
 
-		return quagmire;
+		return output;
 	}
 
 	public static String quagmireIEncrypt(String message, String key, String indicator, char indicatorUnder) throws IllegalArgumentException {
-		return quagmireEncrypt(message, key, "", indicator, indicatorUnder); //no ciphertext key
+		return quagmire(message, key, "", indicator, indicatorUnder, true); //no ciphertext key
 	}
 
 	public static String quagmireIIEncrypt(String message, String key, String indicator, char indicatorUnder) throws IllegalArgumentException {
-		return quagmireEncrypt(message, "", key, indicator, indicatorUnder); //no plaintext key
+		return quagmire(message, "", key, indicator, indicatorUnder, true); //no plaintext key
 	}
 
 	public static String quagmireIIIEncrypt(String message, String key, String indicator, char indicatorUnder) throws IllegalArgumentException {
-		return quagmireEncrypt(message, key, key, indicator, indicatorUnder); //plaintext key and ciphertext key are the same
+		return quagmire(message, key, key, indicator, indicatorUnder, true); //plaintext key and ciphertext key are the same
 	}
 
 	public static String quagmireIVEncrypt(String message, String plaintextKey, String ciphertextKey, String indicator, char indicatorUnder) throws IllegalArgumentException {
-		return quagmireEncrypt(message, plaintextKey, ciphertextKey, indicator, indicatorUnder); //plaintext key and ciphertext key are didfferent
+		return quagmire(message, plaintextKey, ciphertextKey, indicator, indicatorUnder, true); //plaintext key and ciphertext key are didfferent
+	}
+
+	public static String quagmireIDecrypt(String message, String key, String indicator, char indicatorUnder) throws IllegalArgumentException {
+		return quagmire(message, key, "", indicator, indicatorUnder, false); //no ciphertext key
+	}
+
+	public static String quagmireIIDecrypt(String message, String key, String indicator, char indicatorUnder) throws IllegalArgumentException {
+		return quagmire(message, "", key, indicator, indicatorUnder, false); //no plaintext key
+	}
+
+	public static String quagmireIIIDecrypt(String message, String key, String indicator, char indicatorUnder) throws IllegalArgumentException {
+		return quagmire(message, key, key, indicator, indicatorUnder, false); //plaintext key and ciphertext key are the same
+	}
+
+	public static String quagmireIVDecrypt(String message, String plaintextKey, String ciphertextKey, String indicator, char indicatorUnder) throws IllegalArgumentException {
+		return quagmire(message, plaintextKey, ciphertextKey, indicator, indicatorUnder, false); //plaintext key and ciphertext key are didfferent
 	}
 
 	public static boolean validQuagmireKey(String key) { //quagmire keys can't repeat letters
 		char[] chars = key.toCharArray();
 		boolean duplicates = false;
-
 		for (int i = 0; i < chars.length; i++) {
 			for (int j = i + 1; j < chars.length; j++) {
 		    	if (chars[i] == chars[j]) {
@@ -408,34 +430,33 @@ public class CipherTools {
 		    	}
 		  	}
 		}
-		
 		return key.equals("") || (!duplicates && validKey(key)); 	
 	}
 
 	public static boolean contains(char[] array, char target) {
-		for (int i = 0; i < array.length; i++) {
-			if (array[i] == target) {
-				return true;
-			}
-		}
-
-		return false;
+		return indexOf(array, target) != -1;
 	}
 
 	public static char[] getCiphertextAlphabet(char ref, int refPos, String key) { //will start with key then rest of alphabet in order, shift to match ref and refPos
-		char[] ciphertextAlphabet = new char[26];
+		char[] ciphertextAlphabet = new char[ALPHABET.length()];
 		String alphabet = key;
-
-		for (int i = 0; i < 26; i++) {
+		for (int i = 0; i < ALPHABET.length(); i++) {
 			if (!alphabet.contains(ALPHABET.substring(i, i + 1))) {
 				alphabet += ALPHABET.charAt(i);
 			}
 		}
-
-		for (int i = 0; i < 26; i++) {
-			ciphertextAlphabet[i] = alphabet.charAt(mod(alphabet.indexOf(ref) - refPos + i, 26));
+		for (int i = 0; i < ALPHABET.length(); i++) {
+			ciphertextAlphabet[i] = alphabet.charAt(mod(alphabet.indexOf(ref) - refPos + i, ALPHABET.length()));
 		}
-
 		return ciphertextAlphabet;
+	}
+
+	public static int indexOf(char[] array, char target) {
+		for (int i = 0; i < array.length; i++) {
+			if (array[i] == target) {
+				return i;
+			}
+		}
+		return -1;
 	}
 }

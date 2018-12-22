@@ -464,6 +464,11 @@ public class CipherTester {
 					System.out.println("Encrypted message: " + CipherTools.quagmireIEncrypt(input.nextLine(), key, indicator, indicatorUnder));
 					break;
 				case "2":
+					key = getQuagmireKey();
+					indicator = getKey("indicator key");
+					indicatorUnder = getIndicatorUnder();
+					System.out.print("Enter the message to decrypt from Quagmire I, key of \"" + key + "\", and indicator key of \"" + indicator + "\", under the letter \"" + indicatorUnder + "\": ");
+					System.out.println("Decrypted message: " + CipherTools.quagmireIDecrypt(input.nextLine(), key, indicator, indicatorUnder));
 					break;
 				case "3":
 					return true;
@@ -497,6 +502,12 @@ public class CipherTester {
 					System.out.println("Encrypted message: " + CipherTools.quagmireIIEncrypt(input.nextLine(), key, indicator, indicatorUnder));
 					break;
 				case "2":
+					key = getQuagmireKey();
+					indicator = getKey("indicator key");
+					indicatorUnder = getIndicatorUnder();
+					System.out.print("Enter the message to decrypt from Quagmire II, key of \"" + key + "\", and indicator key of \"" + indicator + "\", under the letter \"" + indicatorUnder + "\": ");
+					System.out.println("Decrypted message: " + CipherTools.quagmireIIDecrypt(input.nextLine(), key, indicator, indicatorUnder));
+					
 					break;
 				case "3":
 					return true;
@@ -530,6 +541,11 @@ public class CipherTester {
 					System.out.println("Encrypted message: " + CipherTools.quagmireIIIEncrypt(input.nextLine(), key, indicator, indicatorUnder));
 					break;
 				case "2":
+					key = getQuagmireKey();
+					indicator = getKey("indicator key");
+					indicatorUnder = getIndicatorUnder();
+					System.out.print("Enter the message to decrypt from Quagmire III, key of \"" + key + "\", and indicator key of \"" + indicator + "\", under the letter \"" + indicatorUnder + "\": ");
+					System.out.println("Decrypted message: " + CipherTools.quagmireIIIDecrypt(input.nextLine(), key, indicator, indicatorUnder));
 					break;
 				case "3":
 					return true;
@@ -565,6 +581,12 @@ public class CipherTester {
 					System.out.println("Encrypted message: " + CipherTools.quagmireIVEncrypt(input.nextLine(), plaintextKey, ciphertextKey, indicator, indicatorUnder));
 					break;
 				case "2":
+					plaintextKey = getQuagmireKey("plaintext key");
+					ciphertextKey = getQuagmireKey("ciphertext key");
+					indicator = getKey("indicator key");
+					indicatorUnder = getIndicatorUnder();
+					System.out.print("Enter the message to decrypt from Quagmire IV, plaintext key of \"" + plaintextKey + "\", ciphertext key of \"" + ciphertextKey + "\", and indicator key of \"" + indicator + "\", under the letter \"" + indicatorUnder + "\": ");
+					System.out.println("Decrypted message: " + CipherTools.quagmireIVDecrypt(input.nextLine(), plaintextKey, ciphertextKey, indicator, indicatorUnder));
 					break;
 				case "3":
 					return true;
