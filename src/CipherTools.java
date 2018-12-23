@@ -490,13 +490,12 @@ public class CipherTools {
 		baconianMap.put('Y', "BBAAA");
 		baconianMap.put('Z', "BBAAB");
 
-		String messageUp = message.toUpperCase();
         String baconian = "";
 
         for (int i = 0; i < message.length(); i++) {
             if (Character.isLetter(message.charAt(i))) {
-                String ciphertext = baconianMap.get(Character.toUpperCase(message.charAt(i)));
-                baconian += Character.isUpperCase(message.charAt(i)) ? ciphertext : ciphertext.toLowerCase();
+                String ciphertext = baconianMap.get(Character.toUpperCase(message.charAt(i))); //replace letter with A and B combo
+                baconian += Character.isUpperCase(message.charAt(i)) ? ciphertext : ciphertext.toLowerCase(); //match case
             } else {
                 baconian += message.charAt(i);
             }
@@ -506,6 +505,48 @@ public class CipherTools {
 	}
 
 	public static String baconianDecrypt(String baconian) {
-		return "Not yet implemented.";
+		HashMap<String, Character> baconianMap = new HashMap<>();
+		baconianMap.put("AAAAA", 'A');
+		baconianMap.put("AAAAB", 'B');
+		baconianMap.put("AAABA", 'C');
+		baconianMap.put("AAABB", 'D');
+		baconianMap.put("AABAA", 'E');
+		baconianMap.put("AABAB", 'F');
+		baconianMap.put("AABBA", 'G');
+		baconianMap.put("AABBB", 'H');
+		baconianMap.put("ABAAA", 'I');
+		baconianMap.put("ABAAB", 'J');
+		baconianMap.put("ABABA", 'K');
+		baconianMap.put("ABABB", 'L');
+		baconianMap.put("ABBAA", 'M');
+		baconianMap.put("ABBAB", 'N');
+		baconianMap.put("ABBBA", 'O');
+		baconianMap.put("ABBBB", 'P');
+		baconianMap.put("BAAAA", 'Q');
+		baconianMap.put("BAAAB", 'R');
+		baconianMap.put("BAABA", 'S');
+		baconianMap.put("BAABB", 'T');
+		baconianMap.put("BABAA", 'U');
+		baconianMap.put("BABAB", 'V');
+		baconianMap.put("BABBA", 'W');
+		baconianMap.put("BABBB", 'X');
+		baconianMap.put("BBAAA", 'Y');
+		baconianMap.put("BBAAB", 'Z');
+
+		String message = "";
+
+		for (int i = 0; i < baconian.length(); i++) {
+			if (i <= baconian.length() - 5 && baconianMap.containsKey(baconian.substring(i, i + 5))) { //if the next letters are a uppercase Baconian code
+					message += baconianMap.get(baconian.substring(i, i + 5)); //add appropriate character
+					i += 4;
+			} else if (i <= baconian.length() - 5 && baconianMap.containsKey(baconian.substring(i, i + 5).toUpperCase())) { //if the next letters are a lowercase Baconian code
+					message += Character.toLowerCase(baconianMap.get(baconian.substring(i, i + 5).toUpperCase())); //add appropriate lowercase character
+					i += 4;
+			} else {
+				message += baconian.charAt(i);
+			}
+		}
+
+		return message;
 	}
 }
