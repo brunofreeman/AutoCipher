@@ -146,7 +146,7 @@ public class CipherTester {
 	private static void testAtbash() {
 		boolean terminated = false;
 		while (!terminated) {
-			System.out.print("What would you like to do?\n1) Encrypt with Atbash\n2) Decrypt from Atbash\n3) Return to previous menu\nChoice: ");
+			System.out.print("What would you like to do?\n1) Encrypt with Atbash\n2) Decrypt from Atbash\n3) Explain Atbash\n4) Return to previous menu\nChoice: ");
 			String choice = input.nextLine().trim();
 			terminated = executeAtbashChoice(choice);
 		}
@@ -163,6 +163,9 @@ public class CipherTester {
 					System.out.println("Decrypted message: " + CipherTools.atbashDecrypt(input.nextLine()));
 					break;
 				case "3":
+					System.out.println(CipherTools.ATBASH_DESCRIPTION);
+					break;
+				case "4":
 					return true;
 				default:
 					System.out.print("Invalid selection.\nChoice: ");
@@ -175,7 +178,7 @@ public class CipherTester {
 	private static void testCeasar() {
 		boolean terminated = false;
 		while (!terminated) {
-			System.out.print("What would you like to do?\n1) Encrypt with Ceasar\n2) Decrypt from Ceasar\n3) Return to previous menu\nChoice: ");
+			System.out.print("What would you like to do?\n1) Encrypt with Ceasar\n2) Decrypt from Ceasar\n3) Explain Ceasar\n4) Return to previous menu\nChoice: ");
 			String choice = input.nextLine().trim();
 			terminated = executeCeasarChoice(choice);
 		}
@@ -195,6 +198,9 @@ public class CipherTester {
 					System.out.println("Decrypted message: " + CipherTools.ceasarDecrypt(input.nextLine(), shift));
 					break;
 				case "3":
+					System.out.println(CipherTools.CEASAR_DESCRIPTION);
+					break;
+				case "4":
 					return true;
 				default:
 					System.out.print("Invalid selection.\nChoice: ");
@@ -207,7 +213,7 @@ public class CipherTester {
 	private static void testA1z26() {
 		boolean terminated = false;
 		while (!terminated) {
-			System.out.print("What would you like to do?\n1) Encrypt with A1Z26\n2) Decrypt from A1Z26\n3) Return to previous menu\nChoice: ");
+			System.out.print("What would you like to do?\n1) Encrypt with A1Z26\n2) Decrypt from A1Z26\n3) Explain A1Z26\n4) Return to previous menu\nChoice: ");
 			String choice = input.nextLine().trim();
 			terminated = executeA1z26Choice(choice);
 		}
@@ -224,6 +230,9 @@ public class CipherTester {
 					System.out.println("Decrypted message: " + CipherTools.a1z26Decrypt(input.nextLine()));
 					break;
 				case "3":
+					System.out.println(CipherTools.A1Z26_DESCRIPTION);
+					break;
+				case "4":
 					return true;
 				default:
 					System.out.print("Invalid selection.\nChoice: ");
@@ -236,7 +245,7 @@ public class CipherTester {
 	private static void testVigenere() {
 		boolean terminated = false;
 		while (!terminated) {
-			System.out.print("What would you like to do?\n1) Encrypt with Vigen\u00E9re\n2) Decrypt from Vigen\u00E9re\n3) Return to previous menu\nChoice: ");
+			System.out.print("What would you like to do?\n1) Encrypt with Vigen\u00E9re\n2) Decrypt from Vigen\u00E9re\n3) Explain Vigen\u00E9re\n4) Return to previous menu\nChoice: ");
 			String choice = input.nextLine().trim();
 			terminated = executeVigenereChoice(choice);
 		}
@@ -256,6 +265,9 @@ public class CipherTester {
 					System.out.println("Decrypted message: " + CipherTools.vigenereDecrypt(input.nextLine(), key));
 					break;
 				case "3":
+					System.out.println(CipherTools.VIGENERE_DESCRIPTION);
+					break;
+				case "4":
 					return true;
 				default:
 					System.out.print("Invalid selection.\nChoice: ");
@@ -268,7 +280,7 @@ public class CipherTester {
 	private static void testRailFence() {
 		boolean terminated = false;
 		while (!terminated) {
-			System.out.print("What would you like to do?\n1) Encrypt with Rail Fence\n2) Decrypt from Rail Fence\n3) Return to previous menu\nChoice: ");
+			System.out.print("What would you like to do?\n1) Encrypt with Rail Fence\n2) Decrypt from Rail Fence\n3) Explain Rail Fence\n4) Return to previous menu\nChoice: ");
 			String choice = input.nextLine().trim();
 			terminated = executeRailFenceChoice(choice);
 		}
@@ -288,6 +300,9 @@ public class CipherTester {
 					System.out.println("Decrypted message: " + CipherTools.railFenceDecrypt(input.nextLine(), rails));
 					break;
 				case "3":
+					System.out.println(CipherTools.RAIL_FENCE_DESCRIPTION);
+					break;
+				case "4":
 					return true;
 				default:
 					System.out.print("Invalid selection.\nChoice: ");
@@ -324,7 +339,7 @@ public class CipherTester {
 	private static void testColumnar() {
 		boolean terminated = false;
 		while (!terminated) {
-			System.out.print("What would you like to do?\n1) Encrypt with Columnar\n2) Decrypt from Columnar\n3) Return to previous menu\nChoice: ");
+			System.out.print("What would you like to do?\n1) Encrypt with Columnar\n2) Decrypt from Columnar\n3) Explain Columnar\n4) Return to previous menu\nChoice: ");
 			String choice = input.nextLine().trim();
 			terminated = executeColumnarChoice(choice);
 		}
@@ -344,6 +359,9 @@ public class CipherTester {
 					System.out.println("Decrypted message: " + CipherTools.columnarDecrypt(input.nextLine(), key));
 					break;
 				case "3":
+					System.out.println(CipherTools.COLUMNAR_DESCRIPTION);
+					break;
+				case "4":
 					return true;
 				default:
 					System.out.print("Invalid selection.\nChoice: ");
@@ -356,7 +374,7 @@ public class CipherTester {
 	private static void testAffine() {
 		boolean terminated = false;
 		while (!terminated) {
-			System.out.print("What would you like to do?\n1) Encrypt with Affine\n2) Decrypt from Affine\n3) Return to previous menu\nChoice: ");
+			System.out.print("What would you like to do?\n1) Encrypt with Affine\n2) Decrypt from Affine\n3) Explain Affine\n4) Return to previous menu\nChoice: ");
 			String choice = input.nextLine().trim();
 			terminated = executeAffineChoice(choice);
 		}
@@ -379,6 +397,9 @@ public class CipherTester {
 					System.out.println("Decrypted message: " + CipherTools.affineDecrypt(input.nextLine(), step, shift));
 					break;
 				case "3":
+					System.out.println(CipherTools.AFFINE_DESCRIPTION);
+					break;
+				case "4":
 					return true;
 				default:
 					System.out.print("Invalid selection.\nChoice: ");
@@ -448,7 +469,7 @@ public class CipherTester {
 	private static void testQuagmireI() {
 		boolean terminated = false;
 		while (!terminated) {
-			System.out.print("What would you like to do?\n1) Encrypt with Quagmire I\n2) Decrypt from Quagmire I\n3) Return to previous menu\nChoice: ");
+			System.out.print("What would you like to do?\n1) Encrypt with Quagmire I\n2) Decrypt from Quagmire I\n3) Explain Quagmire I\n4) Return to previous menu\nChoice: ");
 			String choice = input.nextLine().trim();
 			terminated = executeQuagmireIChoice(choice);
 		}
@@ -474,6 +495,9 @@ public class CipherTester {
 					System.out.println("Decrypted message: " + CipherTools.quagmireIDecrypt(input.nextLine(), key, indicator, indicatorUnder));
 					break;
 				case "3":
+					System.out.println(CipherTools.QUAGMIRE_I_DESCRIPTION);
+					break;
+				case "4":
 					return true;
 				default:
 					System.out.print("Invalid selection.\nChoice: ");
@@ -486,7 +510,7 @@ public class CipherTester {
 	private static void testQuagmireII() {
 		boolean terminated = false;
 		while (!terminated) {
-			System.out.print("What would you like to do?\n1) Encrypt with Quagmire II\n2) Decrypt from Quagmire II\n3) Return to previous menu\nChoice: ");
+			System.out.print("What would you like to do?\n1) Encrypt with Quagmire II\n2) Decrypt from Quagmire II\n3) Explain Quagmire II\n4) Return to previous menu\nChoice: ");
 			String choice = input.nextLine().trim();
 			terminated = executeQuagmireIIChoice(choice);
 		}
@@ -513,6 +537,9 @@ public class CipherTester {
 					
 					break;
 				case "3":
+					System.out.println(CipherTools.QUAGMIRE_II_DESCRIPTION);
+					break;
+				case "4":
 					return true;
 				default:
 					System.out.print("Invalid selection.\nChoice: ");
@@ -525,7 +552,7 @@ public class CipherTester {
 	private static void testQuagmireIII() {
 		boolean terminated = false;
 		while (!terminated) {
-			System.out.print("What would you like to do?\n1) Encrypt with Quagmire III\n2) Decrypt from Quagmire III\n3) Return to previous menu\nChoice: ");
+			System.out.print("What would you like to do?\n1) Encrypt with Quagmire III\n2) Decrypt from Quagmire III\n3) Explain Quagmire III\n4) Return to previous menu\nChoice: ");
 			String choice = input.nextLine().trim();
 			terminated = executeQuagmireIIIChoice(choice);
 		}
@@ -551,6 +578,9 @@ public class CipherTester {
 					System.out.println("Decrypted message: " + CipherTools.quagmireIIIDecrypt(input.nextLine(), key, indicator, indicatorUnder));
 					break;
 				case "3":
+					System.out.println(CipherTools.QUAGMIRE_III_DESCRIPTION);
+					break;
+				case "4":
 					return true;
 				default:
 					System.out.print("Invalid selection.\nChoice: ");
@@ -563,7 +593,7 @@ public class CipherTester {
 	private static void testQuagmireIV() {
 		boolean terminated = false;
 		while (!terminated) {
-			System.out.print("What would you like to do?\n1) Encrypt with Quagmire IV\n2) Decrypt from Quagmire IV\n3) Return to previous menu\nChoice: ");
+			System.out.print("What would you like to do?\n1) Encrypt with Quagmire IV\n2) Decrypt from Quagmire IV\n3) Explain Quagmire IV\n4) Return to previous menu\nChoice: ");
 			String choice = input.nextLine().trim();
 			terminated = executeQuagmireIVChoice(choice);
 		}
@@ -592,6 +622,9 @@ public class CipherTester {
 					System.out.println("Decrypted message: " + CipherTools.quagmireIVDecrypt(input.nextLine(), plaintextKey, ciphertextKey, indicator, indicatorUnder));
 					break;
 				case "3":
+					System.out.println(CipherTools.QUAGMIRE_IV_DESCRIPTION);
+					break;
+				case "4":
 					return true;
 				default:
 					System.out.print("Invalid selection.\nChoice: ");
@@ -643,7 +676,7 @@ public class CipherTester {
 	private static void testBaconian() {
 		boolean terminated = false;
 		while (!terminated) {
-			System.out.print("What would you like to do?\n1) Encrypt with Baconian\n2) Decrypt from Baconian\n3) Return to previous menu\nChoice: ");
+			System.out.print("What would you like to do?\n1) Encrypt with Baconian\n2) Decrypt from Baconian\n3) Explain Baconian\n4) Return to previous menu\nChoice: ");
 			String choice = input.nextLine().trim();
 			terminated = executeBaconianChoice(choice);
 		}
@@ -660,6 +693,9 @@ public class CipherTester {
 					System.out.println("Decrypted message: " + CipherTools.baconianDecrypt(input.nextLine()));
 					break;
 				case "3":
+					System.out.println(CipherTools.BACONIAN_DESCRIPTION);
+					break;
+				case "4":
 					return true;
 				default:
 					System.out.print("Invalid selection.\nChoice: ");
