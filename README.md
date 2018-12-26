@@ -13,7 +13,7 @@ There are 12 ciphers so far with encryption and decryption functionality.
 
 **Atbash:** The Atbash cipher replaces each letter in the plaintext with its inverse (e.g. "A" and "Z" turn into each other and "B" and "Y" turn into each other).
 
-**Ceasar:** The Ceasar cipher shifts each letter in the plaintext by a certain amount (e.g. a shift of 3 would make "A" turn into "D" and "Y" turn into "B").
+**Caesar:** The Caesar cipher shifts each letter in the plaintext by a certain amount (e.g. a shift of 3 would make "A" turn into "D" and "Y" turn into "B").
 
 **A1Z26:** The A1Z26 cipher replaces each letter in the plaintext with its index surrounded by dashes (e.g. "abc zyx" becomes "1-2-3 26-25-24").
 
