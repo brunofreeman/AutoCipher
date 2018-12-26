@@ -35,7 +35,7 @@ public class CipherTester {
 	public static void testSubstitution() {
 		boolean terminated = false;
 		while (!terminated) {
-			System.out.print("What substitution cipher would you like to use?\n1) Atbash\n2) Ceasar\n3) A1Z26\n4) Vigen\u00E9re\n5) Affine\n6) Quagmire\n7) Baconian\n8) None, return to previous menu\nChoice: ");
+			System.out.print("What substitution cipher would you like to use?\n1) Atbash\n2) Caesar\n3) A1Z26\n4) Vigen\u00E9re\n5) Affine\n6) Quagmire\n7) Baconian\n8) None, return to previous menu\nChoice: ");
 			String choice = input.nextLine().trim();
 			terminated = executeSubstitutionChoice(choice);
 		}
@@ -47,7 +47,7 @@ public class CipherTester {
 					testAtbash();
 					break;
 				case "2":
-					testCeasar();
+					testCaesar();
 					break;
 				case "3":
 					testA1z26(); 
@@ -175,37 +175,37 @@ public class CipherTester {
 		return false;
 	}
 
-	private static void testCeasar() {
+	private static void testCaesar() {
 		boolean terminated = false;
 		while (!terminated) {
-			System.out.print("What would you like to do?\n1) Encrypt with Ceasar\n2) Decrypt from Ceasar\n3) Explain Ceasar\n4) Return to previous menu\nChoice: ");
+			System.out.print("What would you like to do?\n1) Encrypt with Caesar\n2) Decrypt from Caesar\n3) Explain Caesar\n4) Return to previous menu\nChoice: ");
 			String choice = input.nextLine().trim();
-			terminated = executeCeasarChoice(choice);
+			terminated = executeCaesarChoice(choice);
 		}
 	}
 
-	private static boolean executeCeasarChoice(String choice) {
+	private static boolean executeCaesarChoice(String choice) {
 		int shift = 0;
 		switch (choice) {
 				case "1":
 					shift = getInt("Enter the shift: ");
-					System.out.print("Enter the message to encrypt with Ceasar, shift of " + shift % 26 + ": ");
-					System.out.println("Encrypted message: " + CipherTools.ceasarEncrypt(input.nextLine(), shift));
+					System.out.print("Enter the message to encrypt with Caesar, shift of " + shift % 26 + ": ");
+					System.out.println("Encrypted message: " + CipherTools.caesarEncrypt(input.nextLine(), shift));
 					break;
 				case "2":
 					shift = getInt("Enter the shift: ");
-					System.out.print("Enter the message to decrypt from Ceasar, shift of " + shift % 26 + ": ");
-					System.out.println("Decrypted message: " + CipherTools.ceasarDecrypt(input.nextLine(), shift));
+					System.out.print("Enter the message to decrypt from Caesar, shift of " + shift % 26 + ": ");
+					System.out.println("Decrypted message: " + CipherTools.caesarDecrypt(input.nextLine(), shift));
 					break;
 				case "3":
-					System.out.println(CipherTools.CEASAR_DESCRIPTION);
+					System.out.println(CipherTools.CAESAR_DESCRIPTION);
 					break;
 				case "4":
 					return true;
 				default:
 					System.out.print("Invalid selection.\nChoice: ");
 					String newChoice = input.nextLine().trim();
-					return executeCeasarChoice(newChoice);
+					return executeCaesarChoice(newChoice);
 		}
 		return false;
 	}

@@ -7,17 +7,17 @@ public class CipherTools {
 
 	public static final String ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"; //TO DO?: add more alphabets (e.g. ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789)
 	public static final String ATBASH_DESCRIPTION = "The Atbash cipher replaces each letter in the plaintext with its inverse (e.g. \"A\" and \"Z\" turn into each other and \"B\" and \"Y\" turn into each other)."; //is equivalent to Affine with step and shift of 25
-	public static final String CEASAR_DESCRIPTION = "The Ceasar cipher shifts each letter in the plaintext by a certain amount (e.g. a shift of 3 would make \"A\" turn into \"D\" and \"Y\" turn into \"B\").";
+	public static final String CAESAR_DESCRIPTION = "The Caesar cipher shifts each letter in the plaintext by a certain amount (e.g. a shift of 3 would make \"A\" turn into \"D\" and \"Y\" turn into \"B\").";
 	public static final String A1Z26_DESCRIPTION = "The A1Z26 cipher replaces each letter in the plaintext with its index surrounded by dashes (e.g. \"abc zyx\" becomes \"1-2-3 26-25-24\").";
-	public static final String VIGENERE_DESCRIPTION = "The Vigen\u00E9re cipher is a series of cycling Ceasar ciphers indicated by a key (e.g. with a key of \"ABYZ\" the 1st letter of the plaintext will be encrypted with a Ceasar cipher with a shift of 0, the 2nd with a shift 1, the 3rd with a shift of 24, the fourth with a shift of 25, and then the cycle repeats).";
-	public static final String RAIL_FENCE_DESCRIPTION = "The Rail Fence cipher scrambles the plaintext by writing the message in a zigzag pattern across a specified number of rails, going from left to right and starting at the top. The ciphertext is obtained by reading off each rail from left to right, starting with the top rail and ending with the bottom rail.";
+	public static final String VIGENERE_DESCRIPTION = "The Vigen\u00E9re cipher is a series of cycling Caesar ciphers indicated by a key (e.g. with a key of \"ABYZ\", the 1st letter of the plaintext will be encrypted with a Caesar cipher with a shift of 0, the 2nd with a shift 1, the 3rd with a shift of 24, the 4th with a shift of 25, and then the cycle repeats).";
+	public static final String RAIL_FENCE_DESCRIPTION = "The Rail Fence cipher scrambles the plaintext by writing the message in a zigzag pattern, going from left to right and starting at the top, across a specified number of rails. The ciphertext is then obtained by reading off each rail from left to right, starting with the top rail and ending with the bottom rail.";
 	public static final String COLUMNAR_DESCRIPTION = "The Columnar cipher scrambles the plaintext by writing the message in rows of a length determined by a key. The ciphertext is obtained by reading columns from top to bottom in an order determined by the alphabetical order of the key, with ties going to the leftmost letter.";
 	public static final String AFFINE_DESCRIPTION = "The Affine cipher replaces each letter in the plaintext using the function (ax+b) mod c, where a is an integer relatively prime to c, x is the index of the plaintext letter in the alphabet, b is an integer, and c is the length of the alphabet (usually 26).";
-	public static final String QUAGMIRE_I_DESCRIPTION = "The Quagmire I cipher uses a key (cannot repeat letters), indicator key, and a letter the indicator key is under. A plaintext alphabet is created by writing the key followed by the letters, in alphabetical order, that do not appear in the key. A number, equal to the length of the indicator key, of ciphertext alphabets are then created by placing the corresponding letter of the indicator key at the same index in the plaintext alphabet of the letter that the indicator key was determined to be under and then filling in the rest of the alphabetical by taking a regular alphabet and shifting it until it matches the positioned letter from the indicator key. Cycling through the ciphertext alphabets, each letter from the plaintext is then replaced with the letter in the same index of the current ciphertext alphabet as it is in the plaintext alphabet.";
-	public static final String QUAGMIRE_II_DESCRIPTION = "The Quagmire II cipher uses a key (cannot repeat letters), indicator key, and a letter the indicator key is under. The plaintext alphabet is simply the normal alphabet. A number, equal to the length of the indicator key, of ciphertext alphabets are then created by writing the key followed by the letters, in alphabetical order, that do not appear in the key and shifting the ciphertext alphabet so that the corresponding letter of the indicator key is placed at the same index in the plaintext alphabet of the letter that the indicator key was determined to be under. Cycling through the ciphertext alphabets, each letter from the plaintext is then replaced with the letter in the same index of the current ciphertext alphabet as it is in the plaintext alphabet.";
-	public static final String QUAGMIRE_III_DESCRIPTION = "The Quagmire III cipher uses a key (cannot repeat letters), indicator key, and a letter the indicator key is under. A plaintext alphabet is created by writing the key followed by the letters, in alphabetical order, that do not appear in the key. A number, equal to the length of the indicator key, of ciphertext alphabets are then created by shifting the plaintext alphabet so that the corresponding letter of the indicator key is placed at the same index in the plaintext alphabet of the letter that the indicator key was determined to be under. Cycling through the ciphertext alphabets, each letter from the plaintext is then replaced with the letter in the same index of the current ciphertext alphabet as it is in the plaintext alphabet.";
-	public static final String QUAGMIRE_IV_DESCRIPTION = "The Quagmire IV cipher uses a plaintext key (cannot repeat letters), ciphertext key (cannot repeat letters), indicator key, and a letter the indicator key is under. A plaintext alphabet is created by writing the plaintext key followed by the letters, in alphabetical order, that do not appear in the key. A number, equal to the length of the indicator key, of ciphertext alphabets are then created by writing the ciphertext key followed by the letters, in alphabetical order, that do not appear in the key and shifting the ciphertext alphabet so that the corresponding letter of the indicator key is placed at the same index in the plaintext alphabet of the letter that the indicator key was determined to be under. Cycling through the ciphertext alphabets, each letter from the plaintext is then replaced with the letter in the same index of the current ciphertext alphabet as it is in the plaintext alphabet.";
-	public static final String BACONIAN_DESCRIPTION = "The Baconian cipher replaces each letter in the plaintext with a certain five-letter combination of As and Bs (e.g. \"A\" becomes \"AAAAA\" and \"Z\" becomes \"BBAAB\").";
+	public static final String QUAGMIRE_I_DESCRIPTION = "The Quagmire I cipher uses a key (cannot repeat letters), indicator key, and a letter the indicator key is under. A plaintext alphabet is created by writing the key followed by the letters, in alphabetical order, that do not appear in the key. A number, equal to the length of the indicator key, of ciphertext alphabets are then created by shifting a normal alphabet so that the corresponding letter of the indicator key is at the same index of the letter that the indicator key was determined to be under in the plaintext alphabet and then filling in the rest of the alphabetical by taking a regular alphabet and shifting it until it matches the positioned letter from the indicator key. Cycling through the ciphertext alphabets, each letter from the plaintext is then replaced with the letter in the same index of the current ciphertext alphabet as it is in the plaintext alphabet.";
+	public static final String QUAGMIRE_II_DESCRIPTION = "The Quagmire II cipher uses a key (cannot repeat letters), indicator key, and a letter the indicator key is under. The plaintext alphabet is simply the normal alphabet. A number, equal to the length of the indicator key, of ciphertext alphabets are then created by writing the key followed by the letters, in alphabetical order, that do not appear in the key and then shifting that alphabet so that the corresponding letter of the indicator key is placed at the same index of the letter that the indicator key was determined to be under in the plaintext alphabet. Cycling through the ciphertext alphabets, each letter from the plaintext is then replaced with the letter in the same index of the current ciphertext alphabet as it is in the plaintext alphabet.";
+	public static final String QUAGMIRE_III_DESCRIPTION = "The Quagmire III cipher uses a key (cannot repeat letters), indicator key, and a letter the indicator key is under. A plaintext alphabet is created by writing the key followed by the letters, in alphabetical order, that do not appear in the key. A number, equal to the length of the indicator key, of ciphertext alphabets are then created by shifting the plaintext alphabet so that the corresponding letter of the indicator key is placed at the same index of the letter that the indicator key was determined to be under in the plaintext alphabet. Cycling through the ciphertext alphabets, each letter from the plaintext is then replaced with the letter in the same index of the current ciphertext alphabet as it is in the plaintext alphabet.";
+	public static final String QUAGMIRE_IV_DESCRIPTION = "The Quagmire IV cipher uses a plaintext key (cannot repeat letters), ciphertext key (cannot repeat letters), indicator key, and a letter the indicator key is under. A plaintext alphabet is created by writing the plaintext key followed by the letters, in alphabetical order, that do not appear in the key. A number, equal to the length of the indicator key, of ciphertext alphabets are then created by writing the ciphertext key followed by the letters, in alphabetical order, that do not appear in the key and then shifting that alphabet so that the corresponding letter of the indicator key is placed at the same index of the letter that the indicator key was determined to be under in the plaintext alphabet. Cycling through the ciphertext alphabets, each letter from the plaintext is then replaced with the letter in the same index of the current ciphertext alphabet as it is in the plaintext alphabet.";
+	public static final String BACONIAN_DESCRIPTION = "The Baconian cipher replaces each letter in the plaintext with a specific five-letter combination of As and Bs (e.g. \"A\" becomes \"AAAAA\" and \"Z\" becomes \"BBAAB\").";
 
 	public static char matchCase(char toMatch, char ref) { //converts toMatch to the same case as ref and returns toMatch
 		int unicode = (int) ref;
@@ -87,24 +87,24 @@ public class CipherTools {
 		return atbashEncrypt(atbash); //atbash encryption and decryption is the same procedure
 	}
 
-	public static String ceasarEncrypt(String message, int shift) {
+	public static String caesarEncrypt(String message, int shift) {
 		String messageUp = message.toUpperCase();
 		shift = mod(shift, ALPHABET.length()); //if shift is negative or over alphabet length, normalize it
-		String ceasar = "";
+		String caesar = "";
 
 		for (int i = 0; i < message.length(); i++) {
 			if (Character.isLetter(message.charAt(i))) {
-				ceasar += matchCase(ALPHABET.charAt(mod(ALPHABET.indexOf(messageUp.charAt(i)) + shift, ALPHABET.length())), message.charAt(i)); //if letter, shift and add
+				caesar += matchCase(ALPHABET.charAt(mod(ALPHABET.indexOf(messageUp.charAt(i)) + shift, ALPHABET.length())), message.charAt(i)); //if letter, shift and add
 			} else {
-				ceasar += message.charAt(i);
+				caesar += message.charAt(i);
 			}
 		}
 
-		return ceasar;
+		return caesar;
 	}
 
-	public static String ceasarDecrypt(String ceasar, int shift) {
-		return ceasarEncrypt(ceasar, -1 * shift); //ceasar decryption is an encryption with the negative of the original shift
+	public static String caesarDecrypt(String caesar, int shift) {
+		return caesarEncrypt(caesar, -1 * shift); //caesar decryption is an encryption with the negative of the original shift
 	}
 
 	public static String a1z26Encrypt(String message) {
@@ -156,8 +156,8 @@ public class CipherTools {
 		int keyIndex = 0;
 
 		for (int i = 0; i < input.length(); i++) {
-			if (Character.isLetter(input.charAt(i))) { //if letter, check encrypt and do a appropriate ceasar encryption/decryption for letter of the key
-				output += encrypt ? ceasarEncrypt(Character.toString(input.charAt(i)), ALPHABET.indexOf(key.charAt(keyIndex++))) : ceasarDecrypt(Character.toString(input.charAt(i)), ALPHABET.indexOf(key.charAt(keyIndex++)));
+			if (Character.isLetter(input.charAt(i))) { //if letter, check encrypt and do a appropriate caesar encryption/decryption for letter of the key
+				output += encrypt ? caesarEncrypt(Character.toString(input.charAt(i)), ALPHABET.indexOf(key.charAt(keyIndex++))) : caesarDecrypt(Character.toString(input.charAt(i)), ALPHABET.indexOf(key.charAt(keyIndex++)));
 				if (keyIndex >= key.length()) {
 					keyIndex = 0;
 				}
@@ -331,7 +331,7 @@ public class CipherTools {
 		String output = "";
 
 		for (int i = 0; i < input.length(); i++) {
-			if (Character.isLetter(input.charAt(i))) { //uses formula based on if encrypting or decrypting, uses modulus and shift to essentially do a ceasar and then do even jumps between letters
+			if (Character.isLetter(input.charAt(i))) { //uses formula based on if encrypting or decrypting, uses modulus and shift to essentially do a caesar and then do even jumps between letters
 				output += matchCase(encrypt ? ALPHABET.charAt(mod(step * ALPHABET.indexOf(input.toUpperCase().charAt(i)) + shift, ALPHABET.length())) : ALPHABET.charAt(mod(modMultiplicativeInverse(step, ALPHABET.length()) * (ALPHABET.indexOf(input.toUpperCase().charAt(i)) - shift), ALPHABET.length())), input.charAt(i));
 			} else {
 				output += input.charAt(i);
