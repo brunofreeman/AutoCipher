@@ -1,5 +1,4 @@
 # AutoCipher
-
 ## Useful commands (execute from from root directory):
 compile:
 ```
