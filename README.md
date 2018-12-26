@@ -9,7 +9,7 @@ run:
 java -cp classes CipherTester
 ```
 ## List of Ciphers
-There are 12 so far with encryption and decryption functionality.
+There are 12 ciphers so far with encryption and decryption functionality.
 
 **Atbash:** The Atbash cipher replaces each letter in the plaintext with its inverse (e.g. "A" and "Z" turn into each other and "B" and "Y" turn into each other).
 
