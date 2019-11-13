@@ -133,12 +133,12 @@ public class CipherTools {
 
 		for (int i = 0; i < parts.length; i++) {
 			try {
-				int num = Integer.parseInt(parts[i]); //could throw error
+				int num = Integer.parseInt(parts[i]); //throws error when not number, go to exception
 				if (num < 1 || num > ALPHABET.length()) {
 					throw new Exception();
 				}
 				message += ALPHABET.charAt(num - 1); //convert numbers back to letters
-			} catch (Exception e) {
+			} catch (Exception e) { //MAKE SPECIFIC
 				message += parts[i];
 			}
 		}
