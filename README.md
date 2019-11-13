@@ -1,5 +1,5 @@
 # AutoCipher
-## Useful commands (execute from from root directory):
+## Useful commands (execute from top folder of repo):
 compile:
 ```
 javac -d classes src\*.java
