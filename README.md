@@ -2,12 +2,19 @@
 ## Java commands:
 compile:
 ```
-javac -d classes src\java\*.java
+javac -d java java/*.java
 ```
 run:
 ```
-java -cp classes CipherTester
+java -cp java CipherTester
 ```
+
+## Python commands:
+run:
+```
+python python/cipher_tester.py
+```
+
 ## List of Ciphers
 There are 12 ciphers so far with encryption and decryption functionality.
 
