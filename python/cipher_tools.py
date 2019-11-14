@@ -12,3 +12,4 @@ def atbash_encrypt(pt):
 
 def atbash_decrypt(ct):
 	return atbash_encrypt(ct)
+	
