@@ -1,8 +1,8 @@
 # AutoCipher
-## Useful commands (execute from top folder of repo):
+## Java commands:
 compile:
 ```
-javac -d classes src\*.java
+javac -d classes src\java\*.java
 ```
 run:
 ```
