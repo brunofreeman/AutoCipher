@@ -1,5 +1,5 @@
 #!/usr/bin/swift
-
+//look into swiftc vs running .swift
 let alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
 func matchCase(x: Character, ref: Character) -> Character { //not working
@@ -19,9 +19,11 @@ func atbashEncrypt(pt: String) -> String { //not working
         if alphabet.contains(charAt(s: ptUp, i: i)) {
             //let aIndex = distance(alphabet.startIndex, alphabet.index(of: charAt(s: ptUp, i: i)))
             //let aIndex = alphabet.startIndex.distanceTo(alphabet.index(of: charAt(s: ptUp, i: i)))
-            let aIndex = 0
-            let index = alphabet.count - 1 - aIndex
-            ct += String(matchCase(x: charAt(s: alphabet, i: index), ref: charAt(s: pt, i: i)))
+            //java: let aIndex = alphabet.indexOf(ptUp.charAt(i))
+            //let aIndex = alphabet.index(of: pt[pt.index(pt.startIndex, offsetBy: i)])
+            let indexOfPt = 0
+            let indexOfCt = alphabet.count - 1 - indexOfPt
+            ct += String(matchCase(x: charAt(s: alphabet, i: indexOfCt), ref: charAt(s: pt, i: i)))
         } else {
             ct += String(charAt(s: pt, i: i))
         }
