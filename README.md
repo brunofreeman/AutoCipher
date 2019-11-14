@@ -1,5 +1,7 @@
 # AutoCipher
-## Java commands:
+
+## Comands
+### Java
 compile:
 ```
 javac -d java java/*.java
@@ -8,11 +10,15 @@ run:
 ```
 java -cp java CipherTester
 ```
-
-## Python commands:
+### Python
 run:
 ```
 python python/cipher_tester.py
+```
+### Swift
+run:
+```
+./swift/CipherTools.swift
 ```
 
 ## List of Ciphers
