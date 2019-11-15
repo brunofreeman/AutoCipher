@@ -20,6 +20,11 @@ run:
 ```
 ./swift/CipherTools.swift
 ```
+### Bash
+run:
+```
+./bash/cipher_tools.sh
+```
 
 ## List of Ciphers
 There are 12 ciphers so far with encryption and decryption functionality.
