@@ -4,26 +4,26 @@
 ### Java
 compile:
 ```
-javac -d java java/*.java
+javac -cp '.:org.json.jar' *.java
 ```
 run:
 ```
-java -cp java CipherTester
+java -cp '.:org.json.jar' CipherTester
 ```
 ### Python
 run:
 ```
-python python/cipher_tester.py
+python cipher_tester.py
 ```
 ### Swift
 run:
 ```
-./swift/CipherTools.swift
+./CipherTools.swift
 ```
 ### Bash
 run:
 ```
-./bash/cipher_tools.sh
+./cipher_tools.sh
 ```
 
 ## List of Ciphers

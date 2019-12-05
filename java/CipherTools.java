@@ -3,36 +3,11 @@ import java.util.regex.Matcher;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.io.FileReader;
-import org.json.simple.JSONObject;
-import org.json.simple.JSONArray;
-import org.json.parser.JSONParser;
+import java.io.BufferedReader;
+import org.json.JSONObject;
+import org.json.JSONArray;
 
 public class CipherTools {
-
-	static {
-		JSONParser parser = new JSONParser();
-
-		try {	 
-			JSONObject data = parser.parse(new FileReader(System.getProperty("user.dir") + "\\data.json"));
-			JSONObject descriptions = data.get("descriptions");
-			ALPHABET = (String) data.get("alphabet");
-			ATBASH_DESCRIPTION = descriptions.get("atbash");
-			CAESAR_DESCRIPTION = descriptions.get("caesar");
-			A1Z26_DESCRIPTION = descriptions.get("a1z26");
-			VIGENERE_DESCRIPTION = descriptions.get("vigenere");
-			RAIL_FENCE_DESCRIPTION = descriptions.get("rail_fence");
-			COLUMNAR_DESCRIPTION = descriptions.get("columnar");
-			AFFINE_DESCRIPTION = descriptions.get("affine");
-			QUAGMIRE_I_DESCRIPTION = descriptions.get("quagmire_i");
-			QUAGMIRE_II_DESCRIPTION = descriptions.get("quagmire_ii");
-			QUAGMIRE_III_DESCRIPTION = descriptions.get("quagmire_iii");
-			QUAGMIRE_IV_DESCRIPTION = descriptions.get("quagmire_iv");
-			BACONIAN_DESCRIPTION = descriptions.get("baconian");
-		} catch (Exception e) {
-			System.out.println("Error reading json.data, aborting.");
-			System.exit(1);
-		}
-	}
 
 	public static final String ALPHABET; //TO DO?: add more alphabets (e.g. ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789)
 	public static final String ATBASH_DESCRIPTION; //is equivalent to Affine with step and shift of 25
@@ -47,6 +22,43 @@ public class CipherTools {
 	public static final String QUAGMIRE_III_DESCRIPTION;
 	public static final String QUAGMIRE_IV_DESCRIPTION;
 	public static final String BACONIAN_DESCRIPTION;
+
+	static {
+			JSONObject data = new JSONObject(loadJSON(System.getProperty("user.dir") + "/../data.json"));
+			JSONObject descriptions = data.getJSONObject("descriptions");
+			ALPHABET = data.getString("alphabet");
+			ATBASH_DESCRIPTION = descriptions.getString("atbash");
+			CAESAR_DESCRIPTION = descriptions.getString("caesar");
+			A1Z26_DESCRIPTION = descriptions.getString("a1z26");
+			VIGENERE_DESCRIPTION = descriptions.getString("vigenere");
+			RAIL_FENCE_DESCRIPTION = descriptions.getString("rail_fence");
+			COLUMNAR_DESCRIPTION = descriptions.getString("columnar");
+			AFFINE_DESCRIPTION = descriptions.getString("affine");
+			QUAGMIRE_I_DESCRIPTION = descriptions.getString("quagmire_i");
+			QUAGMIRE_II_DESCRIPTION = descriptions.getString("quagmire_ii");
+			QUAGMIRE_III_DESCRIPTION = descriptions.getString("quagmire_iii");
+			QUAGMIRE_IV_DESCRIPTION = descriptions.getString("quagmire_iv");
+			BACONIAN_DESCRIPTION = descriptions.getString("baconian");
+		
+	}
+
+	private static String loadJSON(String path) {
+		try {
+			BufferedReader br = new BufferedReader(new FileReader(path));
+			StringBuilder sb = new StringBuilder();
+			String line = br.readLine();
+			while (line != null) {
+				sb.append(line);
+				line = br.readLine();
+			}
+			return sb.toString();
+		} catch (Exception e) {
+			System.out.println("Error reading json.data, aborting.");
+			e.printStackTrace();
+			System.exit(1);
+			return "";
+		}
+	}
 
 	public static char matchCase(char toMatch, char ref) { //converts toMatch to the same case as ref and returns toMatch
 		int unicode = (int) ref;
