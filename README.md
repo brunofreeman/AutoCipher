@@ -1,7 +1,7 @@
 # AutoCipher
 
-## Comands
-### Java
+## Commands
+### Java ([org.json](https://github.com/stleary/JSON-java) dependency)
 compile:
 ```
 javac -cp '.:org.json.jar' *.java
