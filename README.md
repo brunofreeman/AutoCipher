@@ -1,31 +1,13 @@
 # AutoCipher
-
-## Commands
-### Java ([org.json](https://github.com/stleary/JSON-java) dependency)
+## Useful commands (execute from top folder of repo):
 compile:
 ```
-javac -cp '.:org.json.jar' *.java
+javac -d classes src\*.java
 ```
 run:
 ```
-java -cp '.:org.json.jar' CipherTester
+java -cp classes CipherTester
 ```
-### Python
-run:
-```
-python cipher_tester.py
-```
-### Swift
-run:
-```
-./CipherTools.swift
-```
-### Bash
-run:
-```
-./cipher_tools.sh
-```
-
 ## List of Ciphers
 There are 12 ciphers so far with encryption and decryption functionality.
 

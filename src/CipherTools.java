@@ -2,63 +2,22 @@ import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.io.FileReader;
-import java.io.BufferedReader;
-import org.json.JSONObject;
-import org.json.JSONArray;
 
 public class CipherTools {
 
-	public static final String ALPHABET; //TO DO?: add more alphabets (e.g. ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789)
-	public static final String ATBASH_DESCRIPTION; //is equivalent to Affine with step and shift of 25
-	public static final String CAESAR_DESCRIPTION;
-	public static final String A1Z26_DESCRIPTION;
-	public static final String VIGENERE_DESCRIPTION;
-	public static final String RAIL_FENCE_DESCRIPTION;
-	public static final String COLUMNAR_DESCRIPTION;
-	public static final String AFFINE_DESCRIPTION;
-	public static final String QUAGMIRE_I_DESCRIPTION;
-	public static final String QUAGMIRE_II_DESCRIPTION;
-	public static final String QUAGMIRE_III_DESCRIPTION;
-	public static final String QUAGMIRE_IV_DESCRIPTION;
-	public static final String BACONIAN_DESCRIPTION;
-
-	static {
-			JSONObject data = new JSONObject(loadJSON(System.getProperty("user.dir") + "/../data.json"));
-			JSONObject descriptions = data.getJSONObject("descriptions");
-			ALPHABET = data.getString("alphabet");
-			ATBASH_DESCRIPTION = descriptions.getString("atbash");
-			CAESAR_DESCRIPTION = descriptions.getString("caesar");
-			A1Z26_DESCRIPTION = descriptions.getString("a1z26");
-			VIGENERE_DESCRIPTION = descriptions.getString("vigenere");
-			RAIL_FENCE_DESCRIPTION = descriptions.getString("rail_fence");
-			COLUMNAR_DESCRIPTION = descriptions.getString("columnar");
-			AFFINE_DESCRIPTION = descriptions.getString("affine");
-			QUAGMIRE_I_DESCRIPTION = descriptions.getString("quagmire_i");
-			QUAGMIRE_II_DESCRIPTION = descriptions.getString("quagmire_ii");
-			QUAGMIRE_III_DESCRIPTION = descriptions.getString("quagmire_iii");
-			QUAGMIRE_IV_DESCRIPTION = descriptions.getString("quagmire_iv");
-			BACONIAN_DESCRIPTION = descriptions.getString("baconian");
-		
-	}
-
-	private static String loadJSON(String path) {
-		try {
-			BufferedReader br = new BufferedReader(new FileReader(path));
-			StringBuilder sb = new StringBuilder();
-			String line = br.readLine();
-			while (line != null) {
-				sb.append(line);
-				line = br.readLine();
-			}
-			return sb.toString();
-		} catch (Exception e) {
-			System.out.println("Error reading json.data, aborting.");
-			e.printStackTrace();
-			System.exit(1);
-			return "";
-		}
-	}
+	public static final String ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"; //TO DO?: add more alphabets (e.g. ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789)
+	public static final String ATBASH_DESCRIPTION = "The Atbash cipher replaces each letter in the plaintext with its inverse (e.g. \"A\" and \"Z\" turn into each other and \"B\" and \"Y\" turn into each other)."; //is equivalent to Affine with step and shift of 25
+	public static final String CAESAR_DESCRIPTION = "The Caesar cipher shifts each letter in the plaintext by a certain amount (e.g. a shift of 3 would make \"A\" turn into \"D\" and \"Y\" turn into \"B\").";
+	public static final String A1Z26_DESCRIPTION = "The A1Z26 cipher replaces each letter in the plaintext with its index surrounded by dashes (e.g. \"abc zyx\" becomes \"1-2-3 26-25-24\").";
+	public static final String VIGENERE_DESCRIPTION = "The Vigen\u00E9re cipher is a series of cycling Caesar ciphers indicated by a key (e.g. with a key of \"ABYZ\", the 1st letter of the plaintext will be encrypted with a Caesar cipher with a shift of 0, the 2nd with a shift 1, the 3rd with a shift of 24, the 4th with a shift of 25, and then the cycle repeats).";
+	public static final String RAIL_FENCE_DESCRIPTION = "The Rail Fence cipher scrambles the plaintext by writing the message in a zigzag pattern, going from left to right and starting at the top, across a specified number of rails. The ciphertext is then obtained by reading off each rail from left to right, starting with the top rail and ending with the bottom rail.";
+	public static final String COLUMNAR_DESCRIPTION = "The Columnar cipher scrambles the plaintext by writing the message in rows of a length determined by a key. The ciphertext is obtained by reading columns from top to bottom in an order determined by the alphabetical order of the key, with ties going to the leftmost letter.";
+	public static final String AFFINE_DESCRIPTION = "The Affine cipher replaces each letter in the plaintext using the function (ax+b) mod c, where a is an integer relatively prime to c, x is the index of the plaintext letter in the alphabet, b is an integer, and c is the length of the alphabet (usually 26).";
+	public static final String QUAGMIRE_I_DESCRIPTION = "The Quagmire I cipher uses a key (cannot repeat letters), indicator key, and a letter the indicator key is under. A plaintext alphabet is created by writing the key followed by the letters, in alphabetical order, that do not appear in the key. A number, equal to the length of the indicator key, of ciphertext alphabets are then created by shifting a normal alphabet so that the corresponding letter of the indicator key is at the same index of the letter that the indicator key was determined to be under in the plaintext alphabet and then filling in the rest of the alphabetical by taking a regular alphabet and shifting it until it matches the positioned letter from the indicator key. Cycling through the ciphertext alphabets, each letter from the plaintext is then replaced with the letter in the same index of the current ciphertext alphabet as it is in the plaintext alphabet.";
+	public static final String QUAGMIRE_II_DESCRIPTION = "The Quagmire II cipher uses a key (cannot repeat letters), indicator key, and a letter the indicator key is under. The plaintext alphabet is simply the normal alphabet. A number, equal to the length of the indicator key, of ciphertext alphabets are then created by writing the key followed by the letters, in alphabetical order, that do not appear in the key and then shifting that alphabet so that the corresponding letter of the indicator key is placed at the same index of the letter that the indicator key was determined to be under in the plaintext alphabet. Cycling through the ciphertext alphabets, each letter from the plaintext is then replaced with the letter in the same index of the current ciphertext alphabet as it is in the plaintext alphabet.";
+	public static final String QUAGMIRE_III_DESCRIPTION = "The Quagmire III cipher uses a key (cannot repeat letters), indicator key, and a letter the indicator key is under. A plaintext alphabet is created by writing the key followed by the letters, in alphabetical order, that do not appear in the key. A number, equal to the length of the indicator key, of ciphertext alphabets are then created by shifting the plaintext alphabet so that the corresponding letter of the indicator key is placed at the same index of the letter that the indicator key was determined to be under in the plaintext alphabet. Cycling through the ciphertext alphabets, each letter from the plaintext is then replaced with the letter in the same index of the current ciphertext alphabet as it is in the plaintext alphabet.";
+	public static final String QUAGMIRE_IV_DESCRIPTION = "The Quagmire IV cipher uses a plaintext key (cannot repeat letters), ciphertext key (cannot repeat letters), indicator key, and a letter the indicator key is under. A plaintext alphabet is created by writing the plaintext key followed by the letters, in alphabetical order, that do not appear in the key. A number, equal to the length of the indicator key, of ciphertext alphabets are then created by writing the ciphertext key followed by the letters, in alphabetical order, that do not appear in the key and then shifting that alphabet so that the corresponding letter of the indicator key is placed at the same index of the letter that the indicator key was determined to be under in the plaintext alphabet. Cycling through the ciphertext alphabets, each letter from the plaintext is then replaced with the letter in the same index of the current ciphertext alphabet as it is in the plaintext alphabet.";
+	public static final String BACONIAN_DESCRIPTION = "The Baconian cipher replaces each letter in the plaintext with a specific five-letter combination of As and Bs (e.g. \"A\" becomes \"AAAAA\" and \"Z\" becomes \"BBAAB\").";
 
 	public static char matchCase(char toMatch, char ref) { //converts toMatch to the same case as ref and returns toMatch
 		int unicode = (int) ref;
@@ -108,20 +67,20 @@ public class CipherTools {
 		}
 		return true;
 	}
-		
+    	
 	public static String atbashEncrypt(String message) {
 		String messageUp = message.toUpperCase();
-		String atbash = "";
+        String atbash = "";
 
-		for (int i = 0; i < message.length(); i++) {
-			if (Character.isLetter(message.charAt(i))) {
-				atbash += matchCase(ALPHABET.charAt(ALPHABET.length() - 1 - ALPHABET.indexOf(messageUp.charAt(i))), message.charAt(i)); //if letter, find inverse and add
-			} else {
-				atbash += message.charAt(i);
-			}
-		}
+        for (int i = 0; i < message.length(); i++) {
+            if (Character.isLetter(message.charAt(i))) {
+                atbash += matchCase(ALPHABET.charAt(ALPHABET.length() - 1 - ALPHABET.indexOf(messageUp.charAt(i))), message.charAt(i)); //if letter, find inverse and add
+            } else {
+                atbash += message.charAt(i);
+            }
+        }
 
-		return atbash;
+        return atbash;
 	}
 
 	public static String atbashDecrypt(String atbash) {
@@ -479,9 +438,9 @@ public class CipherTools {
 		boolean duplicates = false;
 		for (int i = 0; i < chars.length; i++) {
 			for (int j = i + 1; j < chars.length; j++) {
-				if (chars[i] == chars[j]) {
-			  		duplicates = true;
-				}
+		    	if (chars[i] == chars[j]) {
+		      		duplicates = true;
+		    	}
 		  	}
 		}
 		return key.equals("") || (!duplicates && validKey(key)); 	
@@ -543,18 +502,18 @@ public class CipherTools {
 		baconianMap.put('Y', "BBAAA");
 		baconianMap.put('Z', "BBAAB");
 
-		String baconian = "";
+        String baconian = "";
 
-		for (int i = 0; i < message.length(); i++) {
-			if (Character.isLetter(message.charAt(i))) {
-				String ciphertext = baconianMap.get(Character.toUpperCase(message.charAt(i))); //replace letter with A and B combo
-				baconian += Character.isUpperCase(message.charAt(i)) ? ciphertext : ciphertext.toLowerCase(); //match case
-			} else {
-				baconian += message.charAt(i);
-			}
-		}
+        for (int i = 0; i < message.length(); i++) {
+            if (Character.isLetter(message.charAt(i))) {
+                String ciphertext = baconianMap.get(Character.toUpperCase(message.charAt(i))); //replace letter with A and B combo
+                baconian += Character.isUpperCase(message.charAt(i)) ? ciphertext : ciphertext.toLowerCase(); //match case
+            } else {
+                baconian += message.charAt(i);
+            }
+        }
 
-		return baconian;
+        return baconian;
 	}
 
 	public static String baconianDecrypt(String baconian) {

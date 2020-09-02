@@ -1,4 +1,1 @@
-*.class
-*.jar
-*.pyc
-.DS_Store
+classes/
